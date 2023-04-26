@@ -53,7 +53,27 @@ app2.post('/createUser', async (req, res) => {
     }
   });
 
-  
+  //update a user's email
+  app2.post('/updateEmail', async (req, res) => {
+    const { email } = req.body;
+    try {
+      await updateUserEmail(email);
+      res.status(200).send('User email updated successfully');
+    } catch (error) {
+      res.status(500).send('Error updating user email');
+    }
+  });
+
+  //update a user's password
+  app2.post('/updatePassword', async (req, res) => {
+    const { password } = req.body;
+    try {
+      await updateUserPassword(password);
+      res.status(200).send('User password updated successfully');
+    } catch (error) {
+      res.status(500).send('Error updating user password');
+    }
+  });
 
 
 
