@@ -1,5 +1,4 @@
-const app = require('./firebaseConfig.js');
-const admin = require('./firebaseConfig.js');
+const {app, admin} = require('./firebaseConfig.js');
 
 // CHECK IF USER IS LOGGED IN
 async function checkUserLoggedIn() {
@@ -83,3 +82,12 @@ const updateUserEmail = (uid, email) => {
             });
     });
 };
+
+model.exports = {
+    checkUserLoggedIn,
+    countUsers,
+    getUserUid,
+    sleep,
+    updateUserPassword,
+    updateUserEmail
+}

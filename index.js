@@ -1,6 +1,4 @@
-
-const app = require('./firebaseConfig.js');
-const admin = require('./firebaseConfig.js');
+const {app, admin} = require('./firebaseConfig.js');
 
 //lets create a user
 createUser('John Snow','johnsnow@gmail.com', 'password');

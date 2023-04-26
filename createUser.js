@@ -1,5 +1,4 @@
-const app = require('./firebaseConfig.js');
-const admin = require('./firebaseConfig.js');
+const {app, admin} = require('./firebaseConfig.js');
 
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
@@ -55,4 +54,5 @@ async function createUser(name,email, password, set = null) {
   }*/
   }
 
-  module.exports = createUser;
+createUser('Joseph Akra','jobavaw504@syinxun.com', 'password');
+  //module.exports = createUser;
