@@ -4,8 +4,27 @@ const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
 const auth = getAuth();
 
+async function getUserEmail(uid) {
+    try {
+      const userRecord = await admin.auth().getUser(uid);
+      return userRecord.email;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      return null;
+    }
+  }
+
 const deleteUser = async (uid) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+        const email = await getUserEmail(uid);
+        console.log(email);
+        admin.auth().getUserByEmail(email)
+        const userRef = admin.firestore().collection('users').doc('USER_DOCUMENT_ID');
+        userRef.delete().then(() => {
+            console.log('User data deleted successfully');
+        }).catch((error) => {
+        console.error('Error deleting user data:', error);
+        });
         admin.auth().deleteUser(uid)
             .then(() => {
                 console.log('Successfully deleted user');
@@ -18,4 +37,4 @@ const deleteUser = async (uid) => {
     });
 };
 
-deleteUser('c9HuchgW8gdcl68eh4haV2FyMH42')
+//deleteUser('Mwxc4sghAcczssemTc5ovgnB3Tp1');
