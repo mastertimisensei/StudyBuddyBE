@@ -1,5 +1,4 @@
-const app = require('./firebaseConfig.js');
-const admin = require('./firebaseConfig.js');
+const {app, admin} = require('./firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
 function signInWithEmail(email, password) {
