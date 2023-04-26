@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const app2 = express();
 const { createUser } = require('./createUser');
@@ -33,9 +31,29 @@ app2.post('/createUser', async (req, res) => {
       res.status(500).send('Error listing users');
     }
   });
-  
-  
 
+  //sign in a user
+  app2.post('/signIn', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      signInWithEmail(email, password);
+      res.status(200).send('User signed in successfully');
+    } catch (error) {
+      res.status(500).send('Error signing in user');
+    }
+  });
+
+  //sign out a user
+  app2.post('/signOut', async (req, res) => {
+    try {
+      signOutUser();
+      res.status(200).send('User signed out successfully');
+    } catch (error) {
+      res.status(500).send('Error signing out user');
+    }
+  });
+
+  
 
 
 
