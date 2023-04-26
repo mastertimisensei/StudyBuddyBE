@@ -4,6 +4,7 @@ const express = require('express');
 const app2 = express();
 const { createUser } = require('./createUser');
 const {signInWithEmail, signOutUser} = require('./signIn');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail} = require('./utilities');
 
 const PORT = process.env.PORT || 3000;
 
