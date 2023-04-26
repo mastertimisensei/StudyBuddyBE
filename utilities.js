@@ -83,11 +83,28 @@ const updateUserEmail = (uid, email) => {
     });
 };
 
-model.exports = {
+// Function for return all the users in the json format
+const getAllUsers = () => {
+    return new Promise((resolve, reject) => {
+        admin.auth().listUsers()
+            .then((listUsersResult) => {
+                console.log('Total users:', listUsersResult.users.length);
+                resolve(listUsersResult.users);
+            })
+            .catch((error) => {
+                console.log('Error listing users:', error);
+                reject(error);
+            });
+    });
+};
+    
+
+module.exports = {
     checkUserLoggedIn,
     countUsers,
     getUserUid,
-    sleep,
     updateUserPassword,
-    updateUserEmail
+    updateUserEmail,
+    getAllUsers
 }
+
