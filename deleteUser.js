@@ -19,7 +19,7 @@ const deleteUser = async (uid) => {
         const email = await getUserEmail(uid);
         console.log(email);
         admin.auth().getUserByEmail(email)
-        const userRef = admin.firestore().collection('users').doc('USER_DOCUMENT_ID');
+        const userRef = admin.firestore().collection('users').doc(email);
         userRef.delete().then(() => {
             console.log('User data deleted successfully');
         }).catch((error) => {
@@ -37,4 +37,8 @@ const deleteUser = async (uid) => {
     });
 };
 
-//deleteUser('Mwxc4sghAcczssemTc5ovgnB3Tp1');
+module.exports = {
+    deleteUser,
+    getUserEmail
+};
+//deleteUser('ckAaGRP3JfRCpM1RdoNlHksgN6z2');

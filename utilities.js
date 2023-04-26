@@ -1,4 +1,5 @@
 const {app, admin} = require('./firebaseConfig.js');
+const { deleteUser, getUserEmail } = require('./deleteUser.js');
 
 // CHECK IF USER IS LOGGED IN
 async function checkUserLoggedIn() {
@@ -35,6 +36,7 @@ const countUsers = () => {
 async function getUserUid(email) {
     try {
         const userRecord = await admin.auth().getUserByEmail(email);
+        
         //console.log('Successfully fetched user data:', userRecord.toJSON());
 
         
@@ -50,7 +52,7 @@ function sleep(ms) {
 }
 
 // Function for updating a user's password
-const updateUserPassword = (uid, password) => {
+const updateUserPassword =  (uid, password) => {
     return new Promise((resolve, reject) => {
         admin.auth().updateUser(uid, {
             password: password,
@@ -67,10 +69,22 @@ const updateUserPassword = (uid, password) => {
 }
 
 // Function for updating a user's email
-const updateUserEmail = (uid, email) => {
-    return new Promise((resolve, reject) => {
+const updateUserEmail = async (uid, emil) => {
+    return new Promise(async (resolve, reject) => {
+        //update the email in the firestore
+        const email = await getUserEmail(uid);
+        console.log(email);
+        admin.auth().getUserByEmail(email)
+        const userRef = admin.firestore().collection('users').doc(email);
+        admin.firestore().collection('users').doc(email).update({
+            email: emil
+        })
+            .then(() => {
+                console.log('Successfully updated user email in firestore');
+                resolve();
+            })
         admin.auth().updateUser(uid, {
-            email: email,
+            email: emil,
         })
             .then(() => {
                 console.log('Successfully updated user');
@@ -82,6 +96,8 @@ const updateUserEmail = (uid, email) => {
             });
     });
 };
+
+//updateUserEmail('tBIJMmcfoqO39tq6N0lhiyC4cQx2', 'jonsnow@gmail.com')
 
 // Function for return all the users in the json format
 const getAllUsers = () => {
@@ -97,9 +113,7 @@ const getAllUsers = () => {
             });
     });
 };
-
-
-    
+   
 
 module.exports = {
     checkUserLoggedIn,
