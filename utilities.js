@@ -18,6 +18,9 @@ async function checkUserLoggedIn() {
     });
 }
 
+// function to check if a particuluar user uid is logged in
+
+
 // lets count the number of users
 const countUsers = () => {
     return new Promise((resolve, reject) => {
@@ -113,7 +116,58 @@ const getAllUsers = () => {
             });
     });
 };
-   
+
+// function to delete all the users in the database and auth
+const deleteAllUsers = async () => {
+    const users = await getAllUsers();
+    for (let i = 0; i < users.length; i++) {
+        await deleteUser(users[i].uid);
+    }
+};
+
+//deleteAllUsers();
+// fill a users data in firestore
+const setUserData = async (uid, age, Language,Major, InterestedSubjects) => {
+    const email = await getUserEmail(uid);
+    console.log(email);
+    admin.auth().getUserByEmail(email)
+    const userRef = admin.firestore().collection('users').doc(email);
+    admin.firestore().collection('users').doc(email).set({
+        age: age,
+        Language: Language,
+        Major: Major,
+        InterestedSubjects: InterestedSubjects
+    })
+        .then(() => {
+            console.log('Successfully updated user email in firestore');
+            
+        })
+}
+
+// get user data from firestore
+const getUserData = async (uid) => {
+    const email = await getUserEmail(uid);
+    console.log(email);
+    admin.auth().getUserByEmail(email)
+    const userRef = admin.firestore().collection('users').doc(email);
+    admin.firestore().collection('users').doc(email).get()
+        .then((doc) => {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+                return doc.data();
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                return null;
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+            return null;
+        });
+}
+
+
+
 
 module.exports = {
     checkUserLoggedIn,
@@ -121,6 +175,10 @@ module.exports = {
     getUserUid,
     updateUserPassword,
     updateUserEmail,
-    getAllUsers
-}
+    getAllUsers,
+    deleteAllUsers,
+    setUserData,
+    getUserData,
+    sleep
+};
 

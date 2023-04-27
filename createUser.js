@@ -30,8 +30,10 @@ async function createUser(name,email, password, set = null) {
             swipedMe: [],
             notMatches: [],
             photoUrl: "",
-            Nationality: "",
+            Language: [],
             Major: "",
+            University: "",
+            age: "",
             InterestedSubjects: []
             //
             //photoURL: user.photoURL,
@@ -58,4 +60,4 @@ async function createUser(name,email, password, set = null) {
 //createUser('John Snow','johnsnow@gmail.com', 'password');
 //createUser('Josep Stalin','jojostalinbigsick@sicleadmin.com', 'password');
 //createUser('Josep Waterson','jojostalinbigsick@sicleadmin2.com', 'password');
-  //module.exports = createUser;
+module.exports = {createUser};

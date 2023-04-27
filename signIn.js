@@ -35,6 +35,7 @@ function signInWithEmail(email, password) {
       });
   }
 
+
 module.exports = {
     signInWithEmail,
     signOutUser

@@ -1,0 +1,191 @@
+{
+    "universityMajors": [
+      "Accounting",
+      "Biology",
+      "Chemistry",
+      "Computer Engineering",
+      "Computer Science",
+      "Economics",
+      "Education",
+      "English",
+      "Environmental Science",
+      "Graphic Design",
+      "History",
+      "Marketing",
+      "Mathematics",
+      "Psychology",
+      "Sociology"
+    ],
+    "universityCourses": {
+      "Accounting": [
+        "Financial Accounting",
+        "Managerial Accounting",
+        "Auditing",
+        "Taxation",
+        "Accounting Information Systems"
+      ],
+      "Biology": [
+        "General Biology",
+        "Genetics",
+        "Ecology",
+        "Microbiology",
+        "Anatomy and Physiology"
+      ],
+      "Chemistry": [
+        "General Chemistry",
+        "Organic Chemistry",
+        "Analytical Chemistry",
+        "Physical Chemistry",
+        "Biochemistry"
+      ],
+      "Computer Engineering": [
+        "Digital Logic Design",
+        "Computer Organization and Architecture",
+        "Operating Systems",
+        "Computer Networks",
+        "Embedded Systems"
+      ],
+      "Computer Science": [
+        "Introduction to Programming",
+        "Data Structures and Algorithms",
+        "Database Systems",
+        "Computer Graphics",
+        "Artificial Intelligence"
+      ],
+      "Economics": [
+        "Microeconomics",
+        "Macroeconomics",
+        "Econometrics",
+        "International Trade",
+        "Public Finance"
+      ],
+      "Education": [
+        "Introduction to Education",
+        "Educational Psychology",
+        "Curriculum Development",
+        "Classroom Management",
+        "Teaching Strategies"
+      ],
+      "English": [
+        "Introduction to Literature",
+        "Creative Writing",
+        "Shakespeare",
+        "American Literature",
+        "British Literature"
+      ],
+      "Environmental Science": [
+        "Environmental Chemistry",
+        "Ecology and Conservation",
+        "Climate Change",
+        "Environmental Law and Policy",
+        "Environmental Science Research Methods"
+      ],
+      "Graphic Design": [
+        "Introduction to Graphic Design",
+        "Digital Imaging",
+        "Typography",
+        "Web Design",
+        "Publication Design"
+      ],
+      "History": [
+        "World History",
+        "U.S. History",
+        "European History",
+        "Asian History",
+        "African History"
+      ],
+      "Marketing": [
+        "Principles of Marketing",
+        "Consumer Behavior",
+        "Marketing Research",
+        "Advertising and Promotion",
+        "Marketing Strategy"
+      ],
+      "Mathematics": [
+        "Calculus",
+        "Linear Algebra",
+        "Differential Equations",
+        "Abstract Algebra",
+        "Mathematical Modeling"
+      ],
+      "Psychology": [
+        "Introduction to Psychology",
+        "Developmental Psychology",
+        "Abnormal Psychology",
+        "Social Psychology",
+        "Cognitive Psychology"
+      ],
+      "Sociology": [
+        "Introduction to Sociology",
+        "Social Stratification",
+        "Criminology",
+        "Race and Ethnic Relations",
+        "Gender and Society"
+      ]
+    },
+    "universitiesInBudapest": [
+      "Budapest University of Technology and Economics",
+      "Central European University",
+      "Corvinus University of Budapest",
+      "Eötvös Loránd University",
+      "Hungarian University of Fine Arts",
+      "Moholy-Nagy University of Art and Design Budapest",
+      "Semmelweis University",
+      "University of Debrecen Medical School",
+      "University of Pécs Medical School",
+      "University of Public Service",
+      "University of Veterinary Medicine Budapest"
+    ],
+        "languages": [
+          "Arabic",
+          "Bengali",
+          "Chinese (Cantonese)",
+          "Chinese (Mandarin)",
+          "Czech",
+          "Dutch",
+          "English",
+          "French",
+          "German",
+          "Greek",
+          "Gujarati",
+          "Hausa",
+          "Hebrew",
+          "Hindi",
+          "Hungarian",
+          "Indonesian",
+          "Italian",
+          "Japanese",
+          "Kannada",
+          "Korean",
+          "Malay",
+          "Malayalam",
+          "Marathi",
+          "Nepali",
+          "Norwegian",
+          "Oriya",
+          "Pashto",
+          "Persian (Farsi)",
+          "Polish",
+          "Portuguese",
+          "Punjabi",
+          "Romanian",
+          "Russian",
+          "Serbian",
+          "Sinhala",
+          "Somali",
+          "Spanish",
+          "Swahili",
+          "Swedish",
+          "Tagalog",
+          "Tamil",
+          "Telugu",
+          "Thai",
+          "Turkish",
+          "Ukrainian",
+          "Urdu",
+          "Vietnamese",
+          "Yoruba",
+          "Zulu"
+        ]
+            
+    }
