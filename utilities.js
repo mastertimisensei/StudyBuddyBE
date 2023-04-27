@@ -107,7 +107,7 @@ const getAllUsers = () => {
     return new Promise((resolve, reject) => {
         admin.auth().listUsers()
             .then((listUsersResult) => {
-                console.log('Total users:', listUsersResult.users.length);
+                //console.log('Total users:', listUsersResult.users.length);
                 resolve(listUsersResult.users);
             })
             .catch((error) => {
@@ -116,6 +116,23 @@ const getAllUsers = () => {
             });
     });
 };
+
+//function for getting all the user data in the json format
+const getAllUsersData = async () => {
+    const usersData = [];
+    const users = await getAllUsers();
+    // loop through all the users
+    for (let i = 0; i < users.length; i++) {
+        // get the user data from firestore
+        const user = await admin.firestore().collection('users').doc(users[i].email).get();
+        // push the user data to the usersData array
+        usersData.push(user.data());
+    }
+    //console.log(usersData);
+    return usersData;
+};
+getAllUsersData();
+
 
 // function to delete all the users in the database and auth
 const deleteAllUsers = async () => {
@@ -132,7 +149,8 @@ const setUserData = async (uid, age, Language,Major, InterestedSubjects) => {
     console.log(email);
     admin.auth().getUserByEmail(email)
     const userRef = admin.firestore().collection('users').doc(email);
-    admin.firestore().collection('users').doc(email).set({
+
+    admin.firestore().collection('users').doc(email).update({
         age: age,
         Language: Language,
         Major: Major,
@@ -153,6 +171,7 @@ const getUserData = async (uid) => {
     admin.firestore().collection('users').doc(email).get()
         .then((doc) => {
             if (doc.exists) {
+                //console.log("hi")
                 console.log("Document data:", doc.data());
                 return doc.data();
             } else {
@@ -179,6 +198,7 @@ module.exports = {
     deleteAllUsers,
     setUserData,
     getUserData,
-    sleep
+    sleep,
+    getAllUsersData
 };
 

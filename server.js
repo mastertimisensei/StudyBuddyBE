@@ -2,7 +2,7 @@ const express = require('express');
 const app2 = express();
 const { createUser } = require('./createUser');
 const {signInWithEmail, signOutUser} = require('./signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers} = require('./utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData} = require('./utilities');
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,7 +19,7 @@ app2.post('/createUser', async (req, res) => {
 
   //send hello world to '/'
   app2.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.status(200).send('Hello World!');
   });
 
   //list all the users
@@ -75,6 +75,16 @@ app2.post('/createUser', async (req, res) => {
     }
   });
 
+  //function to get all users data
+  app2.get('/getAllUsersData', async (req, res) => {
+    try {
+      const users = await getAllUsersData();
+      res.status(200).send(users);
+    } catch (error) {
+      res.status(500).send('Error listing users');
+    }
+  });
+  
 
 
 app2.listen(PORT, () => {
