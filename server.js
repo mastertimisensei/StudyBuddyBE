@@ -2,7 +2,7 @@ const express = require('express');
 const app2 = express();
 const { createUser } = require('./createUser');
 const {signInWithEmail, signOutUser} = require('./signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData} = require('./utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData} = require('./utilities');
 
 const PORT = process.env.PORT || 3000;
 
@@ -82,6 +82,17 @@ app2.post('/createUser', async (req, res) => {
       res.status(200).send(users);
     } catch (error) {
       res.status(500).send('Error listing users');
+    }
+  });
+
+  //function to edit a user's data
+  app2.post('/setUserData', async (req, res) => {
+    const { uid, age, Language,Major, InterestedSubjects } = req.body;
+    try {
+      await setUserData(uid, age, Language,Major, InterestedSubjects);
+      res.status(200).send('User data updated successfully');
+    } catch (error) {
+      res.status(500).send('Error updating user data');
     }
   });
   

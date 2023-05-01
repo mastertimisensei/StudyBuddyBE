@@ -186,8 +186,6 @@ const getUserData = async (uid) => {
 }
 
 
-
-
 module.exports = {
     checkUserLoggedIn,
     countUsers,
