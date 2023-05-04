@@ -19,7 +19,7 @@ app2.post('/createUser', async (req, res) => {
   const { name, email, password } = req.body;
   
   try {
-    //await createUser(name, email, password);
+    await createUser(name, email, password);
     res.status(200).send('User created successfully');
   } catch (error) {
     res.status(500).send('Error creating user');
