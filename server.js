@@ -1,21 +1,30 @@
 const express = require('express');
 const app2 = express();
+const bodyParser = require('body-parser');
 const { createUser } = require('./createUser');
 const {signInWithEmail, signOutUser} = require('./signIn');
 const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData} = require('./utilities');
 
+app2.use(bodyParser.json());
+
+app2.use(bodyParser.urlencoded({ extended: false }));
+
 const PORT = process.env.PORT || 3000;
 
 app2.post('/createUser', async (req, res) => {
-    const { name, email, password } = req.body;
+  if (!req.body) {
+    return res.status(400).send('Request body is missing');
+  }
+
+  const { name, email, password } = req.body;
   
-    try {
-      await createUser(name, email, password);
-      res.status(200).send('User created successfully');
-    } catch (error) {
-      res.status(500).send('Error creating user');
-    }
-  });
+  try {
+    //await createUser(name, email, password);
+    res.status(200).send('User created successfully');
+  } catch (error) {
+    res.status(500).send('Error creating user');
+  }
+});
 
   //send hello world to '/'
   app2.get('/', (req, res) => {
@@ -95,6 +104,8 @@ app2.post('/createUser', async (req, res) => {
       res.status(500).send('Error updating user data');
     }
   });
+
+  
   
 
 

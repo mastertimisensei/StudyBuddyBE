@@ -2,7 +2,7 @@ const {app, admin} = require('./firebaseConfig.js');
 
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
-function createUser(name, email, password, set) {
+function createUser(name, email, password, set = null) {
   // Check if email is in right format
   if (!email.includes('@') || !email.includes('.')) {
     console.log('Email is not in the right format');
