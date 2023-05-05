@@ -33,7 +33,7 @@ sleep(5000).then(() => {
 
 
 
-console.log("Firebase initialized")
+console.log("Firebase initialized");
 
 
 
