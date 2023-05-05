@@ -1,24 +1,30 @@
 const {app, admin} = require('./firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
-function signInWithEmail(email, password) {
-    // Get the auth object
+async function signInWithEmail(email, password) {
+  try {
     const auth = getAuth();
-    // Sign in with email and password
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Logged in successfully
-        const user = userCredential.user;
-        //console.log("Logged in user:", user);
-      })
-      .catch((error) => {
-        // Error occurred during login
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error("Login error:", errorCode, errorMessage);
-      });
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    //get the token
+    const token = await user.getIdToken();
+    // return token
+    return token;
+    //catch error
+  } catch (error) {
+    console.error('Error signing in with email and password', error);
   }
+}
 
+async function verifyIdToken(idToken) {
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    return decodedToken;
+  } catch (error) {
+    console.error('Error verifying ID token:', error);
+    throw error;
+  }
+}
 
   function signOutUser () {
     // Get the auth object
@@ -38,7 +44,8 @@ function signInWithEmail(email, password) {
 
 module.exports = {
     signInWithEmail,
-    signOutUser
+    signOutUser,
+    verifyIdToken
 };
 
 //signInWithEmail('jobavaw504@syinxun.com', 'password');

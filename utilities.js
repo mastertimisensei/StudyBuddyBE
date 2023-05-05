@@ -1,22 +1,26 @@
 const {app, admin} = require('./firebaseConfig.js');
 const { deleteUser, getUserEmail } = require('./deleteUser.js');
+const { getAuth, signInWithEmailAndPassword, onAuthStateChanged } = require('firebase/auth');
 
 // CHECK IF USER IS LOGGED IN
 async function checkUserLoggedIn() {
     // Get the auth object
     const auth = getAuth();
-    // Add a listener
+    // Check if user is logged in
     onAuthStateChanged(auth, (user) => {
+
         if (user) {
             // User is signed in
             console.log("User is signed in");
             //console.log(user);
         } else {
-            // User is not signed in
-            console.log("No user signed in");
+            // User is signed out
+            console.log("User is signed out");
         }
-    });
+    }
+    );
 }
+//checkUserLoggedIn();
 
 // function to check if a particuluar user uid is logged in
 
@@ -131,7 +135,7 @@ const getAllUsersData = async () => {
     //console.log(usersData);
     return usersData;
 };
-getAllUsersData();
+//getAllUsersData();
 
 
 // function to delete all the users in the database and auth
@@ -144,7 +148,7 @@ const deleteAllUsers = async () => {
 
 //deleteAllUsers();
 // fill a users data in firestore
-const setUserData = async (uid, age, Language,Major, InterestedSubjects) => {
+const setUserData = async (uid, age, Language,Major, InterestedSubjects, Location) => {
     const email = await getUserEmail(uid);
     console.log(email);
     admin.auth().getUserByEmail(email)
@@ -154,7 +158,8 @@ const setUserData = async (uid, age, Language,Major, InterestedSubjects) => {
         age: age,
         Language: Language,
         Major: Major,
-        InterestedSubjects: InterestedSubjects
+        InterestedSubjects: InterestedSubjects,
+        Location: Location
     })
         .then(() => {
             console.log('Successfully updated user email in firestore');

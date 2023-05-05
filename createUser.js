@@ -31,6 +31,7 @@ async function createUser(name,email, password, set = null) {
             notMatches: [],
             photoUrl: "",
             Language: [],
+            Location:"",
             Major: "",
             University: "",
             age: "",

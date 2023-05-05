@@ -2,7 +2,7 @@ const express = require('express');
 const app2 = express();
 const bodyParser = require('body-parser');
 const { createUser } = require('./createUser');
-const {signInWithEmail, signOutUser} = require('./signIn');
+const {signInWithEmail, signOutUser, verifyIdToken} = require('./signIn');
 const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData} = require('./utilities');
 
 app2.use(bodyParser.json());
@@ -21,6 +21,7 @@ app2.post('/createUser', async (req, res) => {
   try {
     await createUser(name, email, password);
     res.status(200).send('User created successfully');
+    //res.status(200).send("No")
   } catch (error) {
     res.status(500).send('Error creating user');
   }
@@ -44,11 +45,11 @@ app2.post('/createUser', async (req, res) => {
   //sign in a user
   app2.post('/signIn', async (req, res) => {
     const { email, password } = req.body;
+    const user = await signInWithEmail(email, password);
     try {
-      signInWithEmail(email, password);
-      res.status(200).send('User signed in successfully');
+      res.status(200).json({ token: user});
     } catch (error) {
-      res.status(500).send('Error signing in user');
+      res.status(500).send(user);
     }
   });
 
@@ -102,6 +103,17 @@ app2.post('/createUser', async (req, res) => {
       res.status(200).send('User data updated successfully');
     } catch (error) {
       res.status(500).send('Error updating user data');
+    }
+  });
+
+
+  //function to check if user is logged in
+  app2.get('/checkUserLoggedIn', async (req, res) => {
+    try {
+      const user = await checkUserLoggedIn();
+      res.status(200).send({email: user});
+    } catch (error) {
+      res.status(500).send('Error checking if user is logged in');
     }
   });
 
