@@ -1,9 +1,9 @@
 const express = require('express');
 const app2 = express();
 const bodyParser = require('body-parser');
-const { createUser } = require('./createUser');
-const {signInWithEmail, signOutUser, verifyIdToken} = require('./signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData} = require('./utilities');
+const { createUser } = require('./backend_functions/createUser');
+const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData} = require('./backend_functions/utilities');
 
 app2.use(bodyParser.json());
 

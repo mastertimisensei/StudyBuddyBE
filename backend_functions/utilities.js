@@ -1,4 +1,4 @@
-const {app, admin} = require('./firebaseConfig.js');
+const {app, admin} = require('../firebaseConfig.js');
 const { deleteUser, getUserEmail } = require('./deleteUser.js');
 const { getAuth, signInWithEmailAndPassword, onAuthStateChanged } = require('firebase/auth');
 

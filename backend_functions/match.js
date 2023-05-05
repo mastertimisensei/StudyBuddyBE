@@ -1,6 +1,6 @@
-const {app, admin} = require('./firebaseConfig.js');
+const {app, admin} = require('../firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers} = require('./utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers} = require('./utilities.js');
 
 // add another user to the a user's buddy list
 async function swipeThem(email, buddy_email) {

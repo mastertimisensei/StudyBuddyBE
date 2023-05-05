@@ -3,7 +3,7 @@ const names = ["Emma Thompson", "Oliver Jackson", "Sophia Garcia", "William Lee"
 const fs = require('fs');
 const { randomInt } = require('crypto');
 const { createUser } = require('./createUser.js');
-const {app, admin} = require('./firebaseConfig.js');
+const {app, admin} = require('../firebaseConfig.js');
 const { getUserUid,setUserData,sleep } = require('./utilities.js');
 
 // Load the data from the JSON file

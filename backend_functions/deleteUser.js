@@ -1,5 +1,5 @@
 // Function for deleting a user
-const {app, admin} = require('./firebaseConfig.js');
+const {app, admin} = require('../firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
 const auth = getAuth();
