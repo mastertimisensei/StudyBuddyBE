@@ -34,6 +34,7 @@ async function createUser(name,email, password, set = null) {
             Location:"",
             Major: "",
             University: "",
+            bio: "",
             age: "",
             InterestedSubjects: []
             //
