@@ -148,18 +148,21 @@ const deleteAllUsers = async () => {
 
 //deleteAllUsers();
 // fill a users data in firestore
-const setUserData = async (uid, age, Language,Major, InterestedSubjects, Location) => {
+const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Location, University, bio) => {
     const email = await getUserEmail(uid);
     console.log(email);
     admin.auth().getUserByEmail(email)
     const userRef = admin.firestore().collection('users').doc(email);
 
     admin.firestore().collection('users').doc(email).update({
+        name: name,
         age: age,
         Language: Language,
         Major: Major,
         InterestedSubjects: InterestedSubjects,
-        Location: Location
+        Location: Location,
+        University: University,
+        bio: bio
     })
         .then(() => {
             console.log('Successfully updated user email in firestore');

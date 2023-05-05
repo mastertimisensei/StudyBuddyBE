@@ -97,9 +97,9 @@ app2.post('/createUser', async (req, res) => {
 
   //function to edit a user's data
   app2.post('/setUserData', async (req, res) => {
-    const { uid, age, Language,Major, InterestedSubjects } = req.body;
+    const { uid, name, age, Language,Major, InterestedSubjects, Location, University, bio} = req.body;
     try {
-      await setUserData(uid, age, Language,Major, InterestedSubjects);
+      await setUserData(uid,name, age, Language,Major, InterestedSubjects, Location,University, bio);
       res.status(200).send('User data updated successfully');
     } catch (error) {
       res.status(500).send('Error updating user data');
