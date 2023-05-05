@@ -111,7 +111,8 @@ app2.post('/createUser', async (req, res) => {
   app2.get('/checkUserLoggedIn', async (req, res) => {
     try {
       const user = await checkUserLoggedIn();
-      res.status(200).send({email: user});
+      //res.status(200).send({email: user});
+      res.status(200).send("User is signed in");
     } catch (error) {
       res.status(500).send('Error checking if user is logged in');
     }
