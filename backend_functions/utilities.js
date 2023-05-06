@@ -1,6 +1,10 @@
 const {app, admin} = require('../firebaseConfig.js');
 const { deleteUser, getUserEmail } = require('./deleteUser.js');
 const { getAuth, signInWithEmailAndPassword, onAuthStateChanged } = require('firebase/auth');
+const { getStorage } = require('firebase-admin/storage');
+const fs = require('fs');
+const path = require('path');
+
 
 // CHECK IF USER IS LOGGED IN
 async function checkUserLoggedIn() {
@@ -30,7 +34,7 @@ const countUsers = () => {
     return new Promise((resolve, reject) => {
         admin.auth().listUsers()
             .then((listUsersResult) => {
-                console.log('Total users:', listUsersResult.users.length);
+                //console.log('Total users:', listUsersResult.users.length);
                 resolve(listUsersResult.users.length);
             })
             .catch((error) => {
@@ -42,11 +46,7 @@ const countUsers = () => {
 
 async function getUserUid(email) {
     try {
-        const userRecord = await admin.auth().getUserByEmail(email);
-        
-        //console.log('Successfully fetched user data:', userRecord.toJSON());
-
-        
+        const userRecord = await admin.auth().getUserByEmail(email);   
         return userRecord.uid;
     } catch (error) {
         console.log('Error fetching user data:', error);
@@ -210,7 +210,53 @@ const getAllUsersExceptCurrentUser = async (email) => {
     return usersData;
 };
 
+// function for uploading a user's profile picture to the storage
+const uploadProfilePicture = async (uid, filePath) => {
+    const email = await getUserEmail(uid);
+    const storage = getStorage();
+    const storageRef = storage.bucket();
+    const fileRef = storageRef.file(`profilePics/${uid}`);
+  
+    const fileBuffer = fs.readFileSync(filePath);
+  
+    const stream = fileRef.createWriteStream({
+      metadata: {
+        contentType: 'image/jpeg',
+      }
+    });
+  
+    stream.on('error', (err) => {
+      console.error(err);
+    });
+  
+    stream.on('finish', () => {
+      console.log(`File uploaded to ${fileRef.name}`);
+    });
+  
+    stream.end(fileBuffer);
+    // update the user's profile picture url in firestore
+    admin.firestore().collection('users').doc(email).update({
+        photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
+    })
+  };
 
+//uploadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82', 'download.jpeg');
+
+//function to download the profile picture
+const downloadProfilePicture = async (uid) => {
+    const email = await getUserEmail(uid);
+    const storage = getStorage();
+    const storageRef = storage.bucket();
+    const fileRef = storageRef.file(`profilePics/${uid}`);
+    const downloadUrl = await fileRef.getSignedUrl({
+        action: 'read',
+        expires: '03-09-2491'
+    });
+    //console.log(downloadUrl);
+    return downloadUrl;
+};
+
+//console.log(downloadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82'));
 
 
 module.exports = {
@@ -225,6 +271,8 @@ module.exports = {
     getUserData,
     sleep,
     getAllUsersData,
-    getAllUsersExceptCurrentUser
+    getAllUsersExceptCurrentUser,
+    uploadProfilePicture,
+    downloadProfilePicture
 };
 

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Study Buddy Admin Dashboard</h1>
+    <p>We currently have {{ count_user }} users.</p>
+    <form action="" method="GET">
+        <input type="text" name="search" placeholder="Search for user">
+        <input type="submit" value="Search">
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+    <p>Dashboard footer</p>
+{% endblock %}
