@@ -3,7 +3,7 @@ const app2 = express();
 const bodyParser = require('body-parser');
 const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData} = require('./backend_functions/utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser} = require('./backend_functions/utilities');
 
 app2.use(bodyParser.json());
 
@@ -29,7 +29,7 @@ app2.post('/createUser', async (req, res) => {
 
   //send hello world to '/'
   app2.get('/', (req, res) => {
-    res.status(200).send('Hello World!');
+    res.status(200).send('Study Buddy Backend is running');
   });
 
   //list all the users
@@ -118,10 +118,32 @@ app2.post('/createUser', async (req, res) => {
     }
   });
 
-  
+  // function to get a particular user data based on uid
+  app2.post('/getUserData', async (req, res) => {
+    const { uid } = req.body;
+    try {
+      const user = await getUserData(uid);
+      res.status(200).send(user);
+    } catch (error) {
+      res.status(500).send('Error getting user data');
+    }
+  });
+
+  // function to get all the user data except the current user
+  app2.post('/getAllOtherUsers', async (req, res) => {
+    const { uid } = req.body;
+    try {
+      const users = await getAllUsersExceptCurrentUser(uid);
+      res.status(200).send(users);
+    } catch (error) {
+      res.status(500).send('Error getting user data');
+    }
+  });
   
 
 
+
+  
 app2.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
   });

@@ -193,6 +193,25 @@ const getUserData = async (uid) => {
         });
 }
 
+// function to get all the users except the current user
+const getAllUsersExceptCurrentUser = async (email) => {
+    const usersData = [];
+    const users = await getAllUsers();
+    // loop through all the users
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].email !== email) {
+            // get the user data from firestore
+            const user = await admin.firestore().collection('users').doc(users[i].email).get();
+            // push the user data to the usersData array
+            usersData.push(user.data());
+        }
+    }
+    //console.log(usersData);
+    return usersData;
+};
+
+
+
 
 module.exports = {
     checkUserLoggedIn,
@@ -205,6 +224,7 @@ module.exports = {
     setUserData,
     getUserData,
     sleep,
-    getAllUsersData
+    getAllUsersData,
+    getAllUsersExceptCurrentUser
 };
 
