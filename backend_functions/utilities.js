@@ -173,25 +173,25 @@ const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Lo
 // get user data from firestore
 const getUserData = async (uid) => {
     const email = await getUserEmail(uid);
-    console.log(email);
-    admin.auth().getUserByEmail(email)
     const userRef = admin.firestore().collection('users').doc(email);
-    admin.firestore().collection('users').doc(email).get()
-        .then((doc) => {
-            if (doc.exists) {
-                //console.log("hi")
-                console.log("Document data:", doc.data());
-                return doc.data();
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-                return null;
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-            return null;
-        });
+    return new Promise((resolve, reject) => {
+        userRef.get()
+            .then((doc) => {
+                if (doc.exists) {
+                    const data = JSON.stringify(doc.data());
+                    resolve(data);
+                } else {
+                    console.log("No such document!");
+                    resolve(null);
+                }
+            })
+            .catch((error) => {
+                console.log("Error getting document:", error);
+                reject(error);
+            });
+    });
 }
+
 
 // function to get all the users except the current user
 const getAllUsersExceptCurrentUser = async (email) => {
@@ -242,8 +242,8 @@ const uploadProfilePicture = async (uid, filePath) => {
 
 //uploadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82', 'download.jpeg');
 
-//function to download the profile picture
-const downloadProfilePicture = async (uid) => {
+//function to show the profile picture
+const showProfilePicture = async (uid) => {
     const email = await getUserEmail(uid);
     const storage = getStorage();
     const storageRef = storage.bucket();
@@ -273,6 +273,6 @@ module.exports = {
     getAllUsersData,
     getAllUsersExceptCurrentUser,
     uploadProfilePicture,
-    downloadProfilePicture
+    showProfilePicture
 };
 

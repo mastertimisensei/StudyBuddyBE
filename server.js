@@ -3,7 +3,7 @@ const app2 = express();
 const bodyParser = require('body-parser');
 const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, downloadProfilePicture, deleteUser} = require('./backend_functions/utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser} = require('./backend_functions/utilities');
 
 app2.use(bodyParser.json());
 
@@ -123,6 +123,7 @@ app2.post('/createUser', async (req, res) => {
     const { uid } = req.body;
     try {
       const user = await getUserData(uid);
+      console.log(user);
       res.status(200).send(user);
     } catch (error) {
       res.status(500).send('Error getting user data');
@@ -152,11 +153,11 @@ app2.post('/createUser', async (req, res) => {
     }
   });
 
-  // function to download a profile picture
-  app2.post('/downloadProfilePicture', async (req, res) => {
+  // function to show a profile picture
+  app2.post('/showProfilePicture', async (req, res) => {
     const { uid } = req.body;
     try {
-      const image = await downloadProfilePicture(uid);
+      const image = await showProfilePicture(uid);
       res.status(200).send(image);
     } catch (error) {
       res.status(500).send('Error downloading profile picture');
