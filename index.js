@@ -1,5 +1,6 @@
 const {app, admin} = require('./firebaseConfig.js');
 const {countUsers, uploadProfilePicture} = require('./backend_functions/utilities.js');
+const {messageBuddy, getMessages, listenForNewMessages} = require('./backend_functions/messaging.js');
 
 //lets create a user
 //createUser('John Snow','johnsnow@gmail.com', 'password');
@@ -38,4 +39,4 @@ sleep(5000).then(() => {
 //console.log("Firebase initialized");
 
 
-
+messageBuddy('abigailjones@fakemaill.com','jobavaw504syinxuncom', 'textf message');
