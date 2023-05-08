@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
 const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser} = require('./backend_functions/utilities');
+const {swipeThem} = require('./backend_functions/match');
+const {messageBuddy} = require('./backend_functions/messaging');
 
 app2.use(bodyParser.json());
 
@@ -141,8 +143,8 @@ app2.post('/createUser', async (req, res) => {
   });
 
   // function to get all the user data except the current user
-  app2.post('/getAllOtherUsers', async (req, res) => {
-    const { token} = req.body;
+  app2.get('/getAllOtherUsers', async (req, res) => {
+    const token = req.headers.authorization;
     try {
       const uid = (await verifyIdToken(token)).uid;
       const users = await getAllUsersExceptCurrentUser(uid);
@@ -185,6 +187,30 @@ app2.post('/createUser', async (req, res) => {
       );
     } catch (error) {
       res.status(500).send('Error counting users');
+    }
+  });
+
+  // function for a user send message to a buddy
+  app2.post('/sendMessage', async (req, res) => {
+    const { token, buddy_email, message } = req.body;
+    try {
+      const uid = (await verifyIdToken(token)).email;
+      await sendMessage(email, buddy_email, message);
+      res.status(200).send('Message sent successfully');
+    } catch (error) {
+      res.status(500).send('Error sending message');
+    }
+  });
+
+  // function for the swiping feature
+  app2.post('/swipe', async (req, res) => {
+    const { token, buddy_email, swipe } = req.body;
+    try {
+      const uid = (await verifyIdToken(token)).email;
+      await swipe(email, buddy_email, swipe);
+      res.status(200).send('Swipe sent successfully');
+    } catch (error) {
+      res.status(500).send('Error sending swipe');
     }
   });
 

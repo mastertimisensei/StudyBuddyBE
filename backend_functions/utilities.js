@@ -197,6 +197,7 @@ const getUserData = async (uid) => {
 
 
 // function to get all the users except the current user
+/*
 const getAllUsersExceptCurrentUser = async (email) => {
     const usersData = [];
     const users = await getAllUsers();
@@ -211,7 +212,27 @@ const getAllUsersExceptCurrentUser = async (email) => {
     }
     //console.log(usersData);
     return usersData;
+};*/
+
+// function to get all the users except the current user, the user's matches and the people who the user has already swiped
+const getAllUsersExceptCurrentUser = async (email) => {
+    const usersData = [];
+    const users = await getAllUsers();
+    // loop through all the users
+    for (let i = 0; i < users.length; i++) {
+        // if user is in the matches array or if user is the current user or if the user is in the swipedThem array
+        if (users[i].email !== email && !users[i].matches.includes(email) && !users[i].swipedThem.includes(email)) {
+            // get the user data from firestore
+            const user = await admin.firestore().collection('users').doc(users[i].email).get();
+            // push the user data to the usersData array
+            usersData.push(user.data());
+        }
+    }
+    //console.log(usersData);
+    return usersData;
 };
+
+
 
 // function for uploading a user's profile picture to the storage
 const uploadProfilePicture = async (uid, filePath) => {

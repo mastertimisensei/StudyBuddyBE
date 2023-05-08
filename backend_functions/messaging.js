@@ -10,59 +10,38 @@ const { firestore } = require('firebase-admin');
 //function to message a buddy
 
 async function messageBuddy(email, buddyEmail, message) {
-    // get the user reference
+    try {
     const userRef = admin.firestore().collection('users').doc(email);
-    // get the buddy reference
     const buddyRef = admin.firestore().collection('users').doc(buddyEmail);
-    // get the user document
+        // check if the messages map exists in the user document
     const userDoc = await userRef.get();
+    let messagesMap = userDoc.data().messages || {};
+    // get the user document
+    let messageId = messagesMap[buddyEmail];
     // get the buddy document
     const buddyDoc = await buddyRef.get();
     // get user name and buddy name
-    const userName = userDoc.data().name;
-    const buddyName = buddyDoc.data().name;
-    try {
-        const newMessage = {
-            from: email,
-            message: message,
-            time: firestore.Timestamp.now()
-        }
-        //check if the message already exist between the two users
-        //const 
-
-        // if the message does not exist, create a new message
-        //if (messageRef.empty) {
+    if (!messageId) {
             // create a new message reference
             const messageRef = admin.firestore().collection('messages').doc();
             // add the users to the message
             await messageRef.set({
                 users: [email, buddyEmail]
             });
-        //}
-        //add new document to message reference
-        const messageDoc = await messageRef.collection("message").doc();
-        await messageDoc.set(newMessage);
-        // add the message ref to the user's messages
-        //create a dictionary of the message and the buddy
-        const messageDict1 = {
-            email: buddyEmail,
-            message: messageRef.id
+            // add the message id to the messages map
+            messagesMap[buddyEmail] = messageRef.id;
+            await userRef.update({ messages: messagesMap });
+            messageId = messageRef.id;
+        }
 
+    // add the new message to the subcollection of the message document
+        const messageDocRef = admin.firestore().collection('messages').doc(messageId).collection('messages').doc();
+        const newMessage = {
+            from: email,
+            message: message,
+            time: admin.firestore.Timestamp.now()
         }
-        const messageDict2 = {
-            email: email,
-            message: messageRef.id
-        }
-        
-        await userRef.update({
-            messages: admin.firestore.FieldValue.arrayUnion(messageDict1)
-        });
-        // add the message ref to the buddy's messages
-        await buddyRef.update({
-            messages: admin.firestore.FieldValue.arrayUnion(messageDict2)
-        });
-        // send a notification to the buddy
-        //await sendNotification(buddyEmail, "{name} sent you a message".formatUnicorn({name: userName}), "{name} sent you a message: {message}".formatUnicorn({name: userName, message: message}));
+        await messageDocRef.set(newMessage);
     } catch (error) {
         console.log(error);
     }
@@ -71,20 +50,21 @@ async function messageBuddy(email, buddyEmail, message) {
 // test messageBuddy
 messageBuddy('jobavaw504@syinxun.com','ameliasmith@fakemaill.com', 'text message');
 
+
+
 //function to get messages between two users(for admin side)
-/*
+
 async function getMessages(email, buddyEmail) {
     // get the user reference
     //console.log(email + buddyEmail);
     const userRef = admin.firestore().collection('users').doc(email);
     // get messages from the userRef
     const userDoc = await userRef.get();
-    // check if the buddy email is part of the message
-    console.log(userDoc.data().messages.includes(email + buddyEmail));
-    console.log(userDoc.data().messages.includes(buddyEmail + email));
-    if (userDoc.data().messages.includes(email + buddyEmail)) {
+    // check if the buddy email is part of the messages map
+
+    if (userDoc.data().messages[buddyEmail] !== null) {
         // get the message reference
-        const messageRef = admin.firestore().collection('messages').doc(email + buddyEmail);
+        const messageRef = admin.firestore().collection('messages').doc(userDoc.data().messages[buddyEmail]);
         // get the message document
         const messageDoc = await messageRef.collection('message').orderBy("time","asc").get();
         // order the messages by time
@@ -105,8 +85,8 @@ async function getMessages(email, buddyEmail) {
     // if the message does not exist, return null
     console.log("No messages");
     return null;
-}*/
-
+}
+/*
 function listenForNewMessages(chatId) {
     const messageRef = admin.firestore().collection('messages').doc(chatId).collection('message');
     messageRef.orderBy("time").onSnapshot((querySnapshot) => {
@@ -123,7 +103,7 @@ function listenForNewMessages(chatId) {
       });
     });
   }
-
+*/
 // test getMessages
 /*
 getMessages('abigailjones@fakemaill.com','jobavaw504@syinxun.com').then((data) => {
@@ -134,4 +114,5 @@ getMessages('abigailjones@fakemaill.com','jobavaw504@syinxun.com').then((data) =
 //listenForNewMessages('abigailjones@fakemaill.comjobavaw504@syinxun.com');
 
 //module.exports = { messageBuddy, getMessages, listenForNewMessages };
-    
+
+module.exports = { messageBuddy, getMessages };
