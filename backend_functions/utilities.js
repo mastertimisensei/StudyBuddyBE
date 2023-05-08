@@ -266,7 +266,7 @@ showProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82').then((url) => {
 });
 */
 
-/*
+
 module.exports = {
     checkUserLoggedIn,
     countUsers,
@@ -283,4 +283,4 @@ module.exports = {
     uploadProfilePicture,
     showProfilePicture
 };
-*/
+
