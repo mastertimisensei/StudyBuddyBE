@@ -65,8 +65,9 @@ app2.post('/createUser', async (req, res) => {
 
   //update a user's email
   app2.post('/updateEmail', async (req, res) => {
-    const { email } = req.body;
+    const { token, email } = req.body;
     try {
+      verifyIdToken(token);
       await updateUserEmail(email);
       res.status(200).send('User email updated successfully');
     } catch (error) {
@@ -76,8 +77,9 @@ app2.post('/createUser', async (req, res) => {
 
   //update a user's password
   app2.post('/updatePassword', async (req, res) => {
-    const { password } = req.body;
+    const {token, password } = req.body;
     try {
+      verifyIdToken(token);
       await updateUserPassword(password);
       res.status(200).send('User password updated successfully');
     } catch (error) {
@@ -97,9 +99,10 @@ app2.post('/createUser', async (req, res) => {
 
   //function to edit a user's data
   app2.post('/setUserData', async (req, res) => {
-    const { uid, name, age, Language,Major, InterestedSubjects, Location, University, bio} = req.body;
+    const {token, name, age, Language,Major, InterestedSubjects, Location, University, bio, photoUrl} = req.body;
     try {
-      await setUserData(uid,name, age, Language,Major, InterestedSubjects, Location,University, bio);
+      const uid = (await verifyIdToken(token)).uid;
+      await setUserData(uid,name, age, Language,Major, InterestedSubjects, Location,University, bio, photoUrl);
       res.status(200).send('User data updated successfully');
     } catch (error) {
       res.status(500).send('Error updating user data');
@@ -120,8 +123,9 @@ app2.post('/createUser', async (req, res) => {
 
   // function to get a particular user data based on uid
   app2.post('/getUserData', async (req, res) => {
-    const { uid } = req.body;
+    const {token} = req.body;
     try {
+      const uid = (await verifyIdToken(token)).uid;
       const user = await getUserData(uid);
       console.log(user);
       res.status(200).send(user);
@@ -132,8 +136,9 @@ app2.post('/createUser', async (req, res) => {
 
   // function to get all the user data except the current user
   app2.post('/getAllOtherUsers', async (req, res) => {
-    const { uid } = req.body;
+    const { token} = req.body;
     try {
+      const uid = (await verifyIdToken(token)).uid;
       const users = await getAllUsersExceptCurrentUser(uid);
       res.status(200).send(users);
     } catch (error) {
@@ -142,6 +147,7 @@ app2.post('/createUser', async (req, res) => {
   });
 
   // function to upload a profile picture
+  /*
   app2.post('/uploadProfilePicture', async (req, res) => {
     const { uid, image } = req.body;
     //image is a path to the image
@@ -162,7 +168,7 @@ app2.post('/createUser', async (req, res) => {
     } catch (error) {
       res.status(500).send('Error downloading profile picture');
     }
-  });
+  });*/
 
   // function to return the number of users
   app2.get('/countUsers', async (req, res) => {

@@ -28,17 +28,22 @@ async function messageBuddy(email, buddyEmail, message) {
             time: firestore.Timestamp.now()
         }
         // check if the message already exists
-        if (userDoc.data().messages.includes(buddyEmail + email)) {
-            // get the message reference
-            var messageRef = admin.firestore().collection('messages').doc(buddyEmail+ email);
-        }
-        else{
-        var messageRef = admin.firestore().collection('messages').doc(email + buddyEmail);
-        }
+        //const messageRef = await admin.firestore().collection('messages').where('users', 'array-contains', email).where('users', 'array-contains', buddyEmail).get();
+        // if the message does not exist, create a new message
+        //if (messageRef.empty) {
+            // create a new message reference
+            const messageRef = admin.firestore().collection('messages').doc();
+            // add the users to the message
+            await messageRef.set({
+                users: [email, buddyEmail]
+            });
+        //}
         //add new document to message reference
         const messageDoc = await messageRef.collection("message").doc();
         await messageDoc.set(newMessage);
         // add the message ref to the user's messages
+        //create a dictionary of the message and the buddy
+        
         await userRef.update({
             messages: admin.firestore.FieldValue.arrayUnion(messageRef.id)
         });
@@ -57,6 +62,7 @@ async function messageBuddy(email, buddyEmail, message) {
 messageBuddy('jobavaw504@syinxun.com','ameliasmith@fakemaill.com', 'text message');
 
 //function to get messages between two users(for admin side)
+/*
 async function getMessages(email, buddyEmail) {
     // get the user reference
     //console.log(email + buddyEmail);
@@ -89,7 +95,7 @@ async function getMessages(email, buddyEmail) {
     // if the message does not exist, return null
     console.log("No messages");
     return null;
-}
+}*/
 
 function listenForNewMessages(chatId) {
     const messageRef = admin.firestore().collection('messages').doc(chatId).collection('message');
@@ -115,7 +121,7 @@ getMessages('abigailjones@fakemaill.com','jobavaw504@syinxun.com').then((data) =
 }
 );*/
 // test listenForNewMessages
-listenForNewMessages('abigailjones@fakemaill.comjobavaw504@syinxun.com');
+//listenForNewMessages('abigailjones@fakemaill.comjobavaw504@syinxun.com');
 
-module.exports = { messageBuddy, getMessages, listenForNewMessages };
+//module.exports = { messageBuddy, getMessages, listenForNewMessages };
     

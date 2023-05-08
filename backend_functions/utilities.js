@@ -148,12 +148,14 @@ const deleteAllUsers = async () => {
 
 //deleteAllUsers();
 // fill a users data in firestore
-const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Location, University, bio) => {
+const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Location, University, bio, photoPath) => {
     const email = await getUserEmail(uid);
     console.log(email);
     admin.auth().getUserByEmail(email)
     const userRef = admin.firestore().collection('users').doc(email);
-
+    uploadProfilePicture(uid, photoPath);
+    var photoLink = await getProfilePicture(uid);
+    photoLink = await showProfilePicture(photoLink);
     admin.firestore().collection('users').doc(email).update({
         name: name,
         age: age,
