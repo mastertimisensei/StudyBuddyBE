@@ -27,8 +27,9 @@ async function messageBuddy(email, buddyEmail, message) {
             message: message,
             time: firestore.Timestamp.now()
         }
-        // check if the message already exists
-        //const messageRef = await admin.firestore().collection('messages').where('users', 'array-contains', email).where('users', 'array-contains', buddyEmail).get();
+        //check if the message already exist between the two users
+        //const 
+
         // if the message does not exist, create a new message
         //if (messageRef.empty) {
             // create a new message reference
@@ -43,13 +44,22 @@ async function messageBuddy(email, buddyEmail, message) {
         await messageDoc.set(newMessage);
         // add the message ref to the user's messages
         //create a dictionary of the message and the buddy
+        const messageDict1 = {
+            email: buddyEmail,
+            message: messageRef.id
+
+        }
+        const messageDict2 = {
+            email: email,
+            message: messageRef.id
+        }
         
         await userRef.update({
-            messages: admin.firestore.FieldValue.arrayUnion(messageRef.id)
+            messages: admin.firestore.FieldValue.arrayUnion(messageDict1)
         });
         // add the message ref to the buddy's messages
         await buddyRef.update({
-            messages: admin.firestore.FieldValue.arrayUnion(messageRef.id)
+            messages: admin.firestore.FieldValue.arrayUnion(messageDict2)
         });
         // send a notification to the buddy
         //await sendNotification(buddyEmail, "{name} sent you a message".formatUnicorn({name: userName}), "{name} sent you a message: {message}".formatUnicorn({name: userName, message: message}));

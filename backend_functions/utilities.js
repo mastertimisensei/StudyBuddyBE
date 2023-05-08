@@ -164,7 +164,8 @@ const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Lo
         InterestedSubjects: InterestedSubjects,
         Location: Location,
         University: University,
-        bio: bio
+        bio: bio,
+        photoUrl: photoLink
     })
         .then(() => {
             console.log('Successfully updated user email in firestore');
@@ -258,9 +259,14 @@ const showProfilePicture = async (uid) => {
     return downloadUrl;
 };
 
-//console.log(downloadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82'));
 
+/*
+showProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82').then((url) => {
+    console.log(url);
+});
+*/
 
+/*
 module.exports = {
     checkUserLoggedIn,
     countUsers,
@@ -277,4 +283,4 @@ module.exports = {
     uploadProfilePicture,
     showProfilePicture
 };
-
+*/
