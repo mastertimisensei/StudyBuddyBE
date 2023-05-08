@@ -153,9 +153,9 @@ const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Lo
     console.log(email);
     admin.auth().getUserByEmail(email)
     const userRef = admin.firestore().collection('users').doc(email);
-    uploadProfilePicture(uid, photoPath);
-    var photoLink = await getProfilePicture(uid);
-    photoLink = await showProfilePicture(photoLink);
+    await uploadProfilePicture(uid, photoPath);
+    //var photoLink = await getProfilePicture(uid);
+    photoLink = await showProfilePicture(uid);
     admin.firestore().collection('users').doc(email).update({
         name: name,
         age: age,

@@ -102,7 +102,12 @@ app2.post('/createUser', async (req, res) => {
     const {token, name, age, Language,Major, InterestedSubjects, Location, University, bio, photoUrl} = req.body;
     try {
       const uid = (await verifyIdToken(token)).uid;
+      console.log(uid);
+      try {
       await setUserData(uid,name, age, Language,Major, InterestedSubjects, Location,University, bio, photoUrl);
+      } catch (error) {
+        res.status(500).send('Error setting user data');
+      }
       res.status(200).send('User data updated successfully');
     } catch (error) {
       res.status(500).send('Error updating user data');
@@ -126,6 +131,7 @@ app2.post('/createUser', async (req, res) => {
     const {token} = req.body;
     try {
       const uid = (await verifyIdToken(token)).uid;
+      console.log(uid);
       const user = await getUserData(uid);
       console.log(user);
       res.status(200).send(user);
