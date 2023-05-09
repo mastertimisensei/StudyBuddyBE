@@ -65,13 +65,46 @@ async function swipeThem(email, buddy_email, swipe = true) {
 
             // Check for a match
             const swipedThem = userDoc.data().swipedThem || [];
-            const swipedMe = 
+            const swipedMe = buddyDoc.data().swipedMe || [];
+            const notMatches = userDoc.data().notMatches || [];
+            const notMatchesBud = buddyDoc.data().notMatches || [];
+            const hasMatch = swipedThem.includes(buddy_uid) && swipedMe.includes(uid) && !notMatches.includes(buddy_uid) && !notMatchesBud.includes(uid);
+                        
+            if (hasMatch) {
+                const matches = userDoc.data().matches || [];
+                const buddyMatches = buddyDoc.data().matches || [];
+                const timestamp = admin.firestore.Timestamp.now();
+    
+                // Update user's matches
+                matches.push({
+                    uid: buddy_uid,
+                    email: buddy_email,
+                    timestamp,
+                });
+                transaction.update(userRef, { matches });
+    
+                // Update buddy's matches
+                buddyMatches.push({
+                    uid,
+                    email,
+                    timestamp,
+                });
+                transaction.update(buddyRef, { matches: buddyMatches });
+            }
+        });
+    
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+    } 
 
 
 
 
 // add a buddy to a user's buddy list
 //swipeThem('masonkim@fakemaill.com','rancisggpoperdbf@gmaik.com');
-//swipeThem('rancisggpoperdbf@gmaik.com','masonkim@fakemaill.com');
+swipeThem('rancisggpoperdbf@gmaik.com','masonkim@fakemaill.com');
 
-module.exports = {swipeThem};
+//module.exports = {swipeThem};
