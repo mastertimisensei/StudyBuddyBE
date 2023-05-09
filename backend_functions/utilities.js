@@ -131,6 +131,12 @@ const getAllUsersData = async () => {
         const user = await admin.firestore().collection('users').doc(users[i].email).get();
         // push the user data to the usersData array
         usersData.push(user.data());
+        //filter the null values
+        /*
+        usersData.filter(function (el) {
+            return el != null;
+        }
+        );*/
     }
     //console.log(usersData);
     return usersData;
@@ -148,7 +154,7 @@ const deleteAllUsers = async () => {
 
 //deleteAllUsers();
 // fill a users data in firestore
-const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Location, University, bio, photoPath) => {
+const setUserData = async (uid,name,AccountName ,age, Language,Major, InterestedSubjects, Location, University, bio, photoPath) => {
     const email = await getUserEmail(uid);
     console.log(email);
     admin.auth().getUserByEmail(email)
@@ -158,6 +164,7 @@ const setUserData = async (uid,name ,age, Language,Major, InterestedSubjects, Lo
     photoLink = await showProfilePicture(uid);
     admin.firestore().collection('users').doc(email).update({
         name: name,
+        AccountName: AccountName,
         age: age,
         Language: Language,
         Major: Major,
@@ -200,8 +207,11 @@ const getUserData = async (uid) => {
 /*
 const getAllUsersExceptCurrentUser = async (email) => {
     const usersData = [];
+    //get all the users from the firestore
+    // loop through all the users in the database
+
     const users = await getAllUsers();
-    // loop through all the users
+    // loop through all the users in the database
     for (let i = 0; i < users.length; i++) {
         if (users[i].email !== email) {
             // get the user data from firestore
@@ -221,15 +231,20 @@ const getAllUsersExceptCurrentUser = async (email) => {
     // loop through all the users
     for (let i = 0; i < users.length; i++) {
         // if user is in the matches array or if user is the current user or if the user is in the swipedThem array
-        if (users[i].email !== email && !users[i].matches.includes(email) && !users[i].swipedThem.includes(email)) {
+        if (users[i].email !== email) {
             // get the user data from firestore
             const user = await admin.firestore().collection('users').doc(users[i].email).get();
+
+            if (user.exists) {
+                // push the user data to the usersData array
+                usersData.push(user.data());
+            }
             // push the user data to the usersData array
-            usersData.push(user.data());
         }
     }
-    //console.log(usersData);
-    return usersData;
+    //convert user data to json
+    const usersDataJson = JSON.stringify(usersData);
+    return usersDataJson;
 };
 
 
@@ -279,6 +294,11 @@ const showProfilePicture = async (uid) => {
     //console.log(downloadUrl);
     return downloadUrl;
 };
+
+/*
+getAllUsersExceptCurrentUser("abigailjones@fakemaill.com").then((users) => {
+    console.log(users);
+});*/
 
 
 /*

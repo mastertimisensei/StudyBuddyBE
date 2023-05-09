@@ -206,8 +206,8 @@ app2.post('/createUser', async (req, res) => {
   app2.post('/swipe', async (req, res) => {
     const { token, buddy_email, swipe } = req.body;
     try {
-      const uid = (await verifyIdToken(token)).email;
-      await swipe(email, buddy_email, swipe);
+      const uid_email = (await verifyIdToken(token)).email;
+      await swipe(uid, buddy_email, swipe);
       // swipe is a boolean value with true as its default
       res.status(200).send('Swipe sent successfully');
     } catch (error) {
