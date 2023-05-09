@@ -131,15 +131,13 @@ const getAllUsersData = async () => {
         const user = await admin.firestore().collection('users').doc(users[i].email).get();
         // push the user data to the usersData array
         usersData.push(user.data());
-        //filter the null values
-        /*
-        usersData.filter(function (el) {
-            return el != null;
-        }
-        );*/
     }
-    //console.log(usersData);
-    return usersData;
+    // filter out null and undefined values
+    const filteredUsersData = usersData.filter(function (el) {
+        return el != null && el != undefined;
+    });
+    //console.log(filteredUsersData);
+    return filteredUsersData;
 };
 //getAllUsersData();
 
