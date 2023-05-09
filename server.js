@@ -205,6 +205,10 @@ app2.post('/createUser', async (req, res) => {
   // function for the swiping feature
   app2.post('/swipe', async (req, res) => {
     const { email, buddy_email, swipe } = req.body;
+    console.log(req.body);
+    console.log(email);
+    console.log(buddy_email);
+    console.log(swipe);
     try {
       //const uid_email = (await verifyIdToken(token)).email;
       await swipeThem(email, buddy_email, swipe);
