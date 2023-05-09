@@ -15,7 +15,7 @@ async function swipeThem(email, buddy_email, swipe = true) {
             getUserUid(email),
             getUserUid(buddy_email),
         ]);
-
+    
         // Perform updates inside a transaction
         await admin.firestore().runTransaction(async (transaction) => {
             const userRef = admin.firestore().collection('users').doc(email);
@@ -24,77 +24,67 @@ async function swipeThem(email, buddy_email, swipe = true) {
                 transaction.get(userRef),
                 transaction.get(buddyRef),
             ]);
-
+    
             if (swipe) {
-                // Add buddy to user's swipedThem list
-                const swipedThem = userDoc.data().swipedThem || [];
-                swipedThem.push(buddy_uid);
-                transaction.update(userRef, { swipedThem });
-
-                // Add user to buddy's swipedMe list
-                const swipedMe = buddyDoc.data().swipedMe || [];
-                swipedMe.push(uid);
-                transaction.update(buddyRef, { swipedMe });
+                // Add buddy to user's swipedThem set
+                var swipedThem = new Set(userDoc.data().swipedThem || []);
+                swipedThem.add(buddy_uid);
+                swipedThem = new Set(swipedThem);
+                transaction.update(userRef, { swipedThem: Array.from(swipedThem) });
+    
+                // Add user to buddy's swipedMe set
+                const swipedMe = new Set(buddyDoc.data().swipedMe || []);
+                swipedMe.add(uid);
+                swipedThem = new Set(swipedThem);
+                transaction.update(buddyRef, { swipedMe: Array.from(swipedMe) });
             } else {
-                // Add buddy to user's notMatches list
-                const notMatches = userDoc.data().notMatches || [];
-                notMatches.push(buddy_uid);
-                transaction.update(userRef, { notMatches });
-
-                // Add user to buddy's notMatches list
-                const notMatchesBud = buddyDoc.data().notMatches || [];
-                notMatchesBud.push(uid);
-                transaction.update(buddyRef, { notMatches: notMatchesBud });
-
-                // Remove user from buddy's swipedMe list
-                const swipedMe = buddyDoc.data().swipedMe || [];
-                const index = swipedMe.indexOf(uid);
-                if (index !== -1) {
-                    swipedMe.splice(index, 1);
-                    transaction.update(buddyRef, { swipedMe });
-                }
-
-                // Remove buddy from user's swipedThem list
-                const swipedThem = userDoc.data().swipedThem || [];
-                const buddyIndex = swipedThem.indexOf(buddy_uid);
-                if (buddyIndex !== -1) {
-                    swipedThem.splice(buddyIndex, 1);
-                    transaction.update(userRef, { swipedThem });
-                }
+                // Add buddy to user's notMatches set
+                var notMatches = new Set(userDoc.data().notMatches || []);
+                notMatches.add(buddy_uid);
+                notMatches = new Set(notMatches);
+                transaction.update(userRef, { notMatches: Array.from(notMatches) });
+    
+                // Add user to buddy's notMatches set
+                const notMatchesBud = new Set(buddyDoc.data().notMatches || []);
+                notMatchesBud.add(uid);
+                transaction.update(buddyRef, { notMatches: Array.from(notMatchesBud) });
+    
+                // Remove user from buddy's swipedMe set
+                const swipedMe = new Set(buddyDoc.data().swipedMe || []);
+                swipedMe.delete(uid);
+                transaction.update(buddyRef, { swipedMe: Array.from(swipedMe) });
+    
+                // Remove buddy from user's swipedThem set
+                const swipedThem = new Set(userDoc.data().swipedThem || []);
+                swipedThem.delete(buddy_uid);
+                transaction.update(userRef, { swipedThem: Array.from(swipedThem) });
             }
-
+    
             // Check for a match
-            const swipedThem = userDoc.data().swipedThem || [];
-            const swipedMe = buddyDoc.data().swipedMe || [];
-            const notMatches = userDoc.data().notMatches || [];
-            const notMatchesBud = buddyDoc.data().notMatches || [];
-            const hasMatch = swipedThem.includes(buddy_uid) && swipedMe.includes(uid) && !notMatches.includes(buddy_uid) && !notMatchesBud.includes(uid);
-                        
+            const swipedThem = new Set(userDoc.data().swipedThem || []);
+            const swipedMe = new Set(buddyDoc.data().swipedMe || []);
+            const notMatches = new Set(userDoc.data().notMatches || []);
+            const notMatchesBud = new Set(buddyDoc.data().notMatches || []);
+            const hasMatch = swipedThem.has(buddy_uid) && swipedMe.has(uid) && !notMatches.has(buddy_uid) && !notMatchesBud.has(uid);
+            
             if (hasMatch) {
-                const matches = userDoc.data().matches || [];
-                const buddyMatches = buddyDoc.data().matches || [];
+                const buddies = new Set(userDoc.data().buddies || []);
+                const buddybuddies = new Set(buddyDoc.data().buddies || []);
                 const timestamp = admin.firestore.Timestamp.now();
     
                 // Update user's matches
-                matches.push({
-                    uid: buddy_uid,
-                    email: buddy_email,
-                    timestamp,
-                });
-                transaction.update(userRef, { matches });
+                buddies.add(buddy_uid);
+                transaction.update(userRef, { buddies: Array.from(buddies) });
     
-                // Update buddy's matches
-                buddyMatches.push({
-                    uid,
-                    email,
-                    timestamp,
-                });
-                transaction.update(buddyRef, { matches: buddyMatches });
-            }
+                // Update buddy's buddies
+                buddybuddies.add(uid);
+                transaction.update(buddyRef, { buddies: Array.from(buddybuddies) });
+    }
         });
-    
+        console.log('swipe complete');
         return true;
-    } catch (error) {
+    }
+     catch (error) {
         console.error(error);
         return false;
     }
