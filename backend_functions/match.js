@@ -27,26 +27,31 @@ async function swipeThem(email, buddy_email, swipe = true) {
     
             if (swipe) {
                 // Add buddy to user's swipedThem set
-                var swipedThem = new Set(userDoc.data().swipedThem || []);
+                let swipedThem = new Set(userDoc.data().swipedThem || []);
                 swipedThem.add(buddy_uid);
+                swipedThem = Array.from(swipedThem);
                 swipedThem = new Set(swipedThem);
                 transaction.update(userRef, { swipedThem: Array.from(swipedThem) });
     
                 // Add user to buddy's swipedMe set
-                const swipedMe = new Set(buddyDoc.data().swipedMe || []);
+                let swipedMe = new Set(buddyDoc.data().swipedMe || []);
                 swipedMe.add(uid);
-                swipedThem = new Set(swipedThem);
+                swipedMe = Array.from(swipedMe);
+                swipedMe = new Set(swipedMe);
                 transaction.update(buddyRef, { swipedMe: Array.from(swipedMe) });
             } else {
                 // Add buddy to user's notMatches set
-                var notMatches = new Set(userDoc.data().notMatches || []);
+                let notMatches = new Set(userDoc.data().notMatches || []);
                 notMatches.add(buddy_uid);
+                notMatches = Array.from(notMatches);
                 notMatches = new Set(notMatches);
                 transaction.update(userRef, { notMatches: Array.from(notMatches) });
     
                 // Add user to buddy's notMatches set
-                const notMatchesBud = new Set(buddyDoc.data().notMatches || []);
+                let notMatchesBud = new Set(buddyDoc.data().notMatches || []);
                 notMatchesBud.add(uid);
+                notMatchesBud = Array.from(notMatchesBud);
+                notMatchesBud = new Set(notMatchesBud);
                 transaction.update(buddyRef, { notMatches: Array.from(notMatchesBud) });
     
                 // Remove user from buddy's swipedMe set
@@ -95,6 +100,6 @@ async function swipeThem(email, buddy_email, swipe = true) {
 
 // add a buddy to a user's buddy list
 //swipeThem('masonkim@fakemaill.com','rancisggpoperdbf@gmaik.com');
-swipeThem('rancisggpoperdbf@gmaik.com','masonkim@fakemaill.com');
+//swipeThem('rancisggpoperdbf@gmaik.com','masonkim@fakemaill.com');
 
 //module.exports = {swipeThem};
