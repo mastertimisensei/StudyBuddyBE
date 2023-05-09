@@ -104,4 +104,4 @@ async function swipeThem(email, buddy_email, swipe = true) {
 //swipeThem("sophiagarcia@fakemaill.com","test@test.com");
 //swipeThem('rancisggpoperdbf@gmaik.com','masonkim@fakemaill.com');
 
-//module.exports = {swipeThem};
+module.exports = {swipeThem};
