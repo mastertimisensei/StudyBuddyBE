@@ -15,6 +15,7 @@ async function swipeThem(email, buddy_email, swipe = true) {
             getUserUid(email),
             getUserUid(buddy_email),
         ]);
+        
     
         // Perform updates inside a transaction
         await admin.firestore().runTransaction(async (transaction) => {

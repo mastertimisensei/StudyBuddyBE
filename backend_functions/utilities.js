@@ -200,43 +200,16 @@ const getUserData = async (uid) => {
 }
 
 
-// function to get all the users except the current user
-/*
-const getAllUsersExceptCurrentUser = async (email) => {
-    const usersData = [];
-    //get all the users from the firestore
-    // loop through all the users in the database
-
-    const users = await getAllUsers();
-    // loop through all the users in the database
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].email !== email) {
-            // get the user data from firestore
-            const user = await admin.firestore().collection('users').doc(users[i].email).get();
-            // push the user data to the usersData array
-            usersData.push(user.data());
-        }
-    }
-    //console.log(usersData);
-    return usersData;
-};*/
-
 // function to get all the users except the current user, the user's matches and the people who the user has already swiped
 const getAllUsersExceptCurrentUser = async (email) => {
     const usersData = [];
-    const users = await getAllUsers();
+    const users = await getAllUsersData();
     // loop through all the users
     for (let i = 0; i < users.length; i++) {
-        // if user is in the matches array or if user is the current user or if the user is in the swipedThem array
-        if (users[i].email !== email) {
-            // get the user data from firestore
-            const user = await admin.firestore().collection('users').doc(users[i].email).get();
-
-            if (user.exists) {
-                // push the user data to the usersData array
-                usersData.push(user.data());
-            }
+        // if the user is not the current user, the user's matches and the people who the user has already swiped
+        if (users[i].email != email && !users[i].buddies.includes(email) && !users[i].swipedThem.includes(email)) {
             // push the user data to the usersData array
+            usersData.push(users[i]);
         }
     }
     //convert user data to json
@@ -292,10 +265,24 @@ const showProfilePicture = async (uid) => {
     return downloadUrl;
 };
 
-/*
-getAllUsersExceptCurrentUser("abigailjones@fakemaill.com").then((users) => {
-    console.log(users);
-});*/
+// function to remove user from buddy list
+const removeUserFromBuddyList = async (email, buddy_email) => {
+    const userRef = admin.firestore().collection('users').doc(email);
+    const buddyRef = admin.firestore().collection('users').doc(buddy_email);
+    //get the buddies uid
+    const buddy_uid = await getUserUid(buddy_email);
+    //get the user's uid
+    const user_uid = await getUserUid(email);
+    // remove the buddy from the user's buddy list
+    await userRef.update({
+        buddies: admin.firestore.FieldValue.arrayRemove(buddy_uid)
+    });
+    // remove the user from the buddy's buddy list
+    await buddyRef.update({
+        buddies: admin.firestore.FieldValue.arrayRemove(user_uid)
+    });
+};
+
 
 
 /*
@@ -319,6 +306,7 @@ module.exports = {
     getAllUsersData,
     getAllUsersExceptCurrentUser,
     uploadProfilePicture,
-    showProfilePicture
+    showProfilePicture,
+    removeUserFromBuddyList
 };
 

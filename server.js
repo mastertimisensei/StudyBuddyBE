@@ -3,7 +3,7 @@ const app2 = express();
 const bodyParser = require('body-parser');
 const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser} = require('./backend_functions/utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList } = require('./backend_functions/utilities');
 const {swipeThem} = require('./backend_functions/match');
 const {messageBuddy} = require('./backend_functions/messaging');
 
@@ -219,6 +219,39 @@ app2.post('/createUser', async (req, res) => {
       console.log(error);
     }
   });
+
+  // function to get the users buddies
+  app2.post('/getBuddies', async (req, res) => {
+    const { token } = req.body;
+    try {
+      const uid = (await verifyIdToken(token)).uid;
+      const buddies = await getUserData(uid);
+      // convert buddies to a json object
+      buddiesJson = JSON.parse(buddies);
+      console.log(buddiesJson);
+      // get buddies from the user data
+      console.log(buddiesJson.buddies);
+
+      res.status(200).send(buddiesJson.buddies);
+    } catch (error) {
+      res.status(500).send('Error getting buddies');
+    }
+  });
+
+  // functions to remove a buddy
+  app2.post('/removeBuddy', async (req, res) => {
+    const { token, buddy_email } = req.body;
+    try {
+      const email = (await verifyIdToken(token)).email;
+      await removeUserFromBuddyList(email, buddy_email);
+      res.status(200).send('Buddy removed successfully');
+    } catch (error) {
+      //console.log(error);
+      res.status(500).send('Error removing buddy');
+    }
+  });
+
+
 
   
 app2.listen(PORT, () => {
