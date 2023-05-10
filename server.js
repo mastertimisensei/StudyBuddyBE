@@ -148,6 +148,7 @@ app2.post('/createUser', async (req, res) => {
     try {
       const uid = (await verifyIdToken(token)).uid;
       const users = await getAllUsersExceptCurrentUser(uid);
+      console.log(token);
       res.status(200).send(users);
     } catch (error) {
       res.status(500).send('Error getting user data');
