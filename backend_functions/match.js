@@ -102,7 +102,6 @@ async function swipeThem(email, buddy_email, swipe = true) {
 
 // add a buddy to a user's buddy list
 //swipeThem('masonkim@fakemaill.com','rancisggpoperdbf@gmaik.com');
-//swipeThem("sophiagarcia@fakemaill.com","test@test.com");
 //swipeThem('rancisggpoperdbf@gmaik.com','masonkim@fakemaill.com');
 
 module.exports = {swipeThem};

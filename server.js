@@ -46,7 +46,7 @@ app2.post('/createUser', async (req, res) => {
 
   //sign in a user
   app2.post('/signIn', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, flag } = req.body;
     const user = await signInWithEmail(email, password);
     try {
       res.status(200).json({ token: user});
@@ -101,7 +101,7 @@ app2.post('/createUser', async (req, res) => {
 
   //function to edit a user's data
   app2.post('/setUserData', async (req, res) => {
-    const {token, name, age, Language,Major, InterestedSubjects, Location, University, bio, photoUrl} = req.body;
+    const {token, name, age, Language,Major, InterestedSubjects, Location, University, bio, photoUrl, flag} = req.body;
     try {
       const uid = (await verifyIdToken(token)).uid;
       console.log(uid);

@@ -1,7 +1,7 @@
 const {app, admin} = require('../firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
-async function signInWithEmail(email, password) {
+async function signInWithEmail(email, password, flag = true) {
   try {
     const auth = getAuth();
     const userCredential = await signInWithEmailAndPassword(auth, email, password);

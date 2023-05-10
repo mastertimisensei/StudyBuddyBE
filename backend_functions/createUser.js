@@ -3,7 +3,7 @@ const {app, admin} = require('../firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 
 
-async function createUser(name,email, password, Location = "", set = null) {
+async function createUser(name,email, password, Location = "", set = null, flag = false) {
     try {
         //check if email is in right format
         if (!email.includes('@') || !email.includes('.')) {
@@ -36,7 +36,8 @@ async function createUser(name,email, password, Location = "", set = null) {
             University: "",
             bio: "",
             age: "",
-            InterestedSubjects: []
+            InterestedSubjects: [],
+            flag: flag
             //
             //photoURL: user.photoURL,
         });
