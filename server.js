@@ -144,16 +144,21 @@ app2.post('/createUser', async (req, res) => {
 
   // function to get all the user data except the current user
   app2.get('/getAllOtherUsers', async (req, res) => {
-    const token = req.headers.authorization;
     try {
-      const uid = (await verifyIdToken(token)).uid;
+      const token = req.headers.authorization.split('Bearer ')[1];
+      console.log(token)
+      await verifyIdToken(token).then(async (decodedToken) => {
+      const uid = decodedToken.uid;
       const users = await getAllUsersExceptCurrentUser(uid);
-      console.log(token);
       res.status(200).send(users);
+      });
     } catch (error) {
+      console.error(error);
       res.status(500).send('Error getting user data');
     }
   });
+  
+  
 
   // function to upload a profile picture
   /*
