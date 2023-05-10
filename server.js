@@ -146,7 +146,7 @@ app2.post('/createUser', async (req, res) => {
   app2.get('/getAllOtherUsers', async (req, res) => {
     try {
       const token = req.headers.authorization.split('Bearer ')[1];
-      console.log(token)
+      //console.log(token)
       await verifyIdToken(token).then(async (decodedToken) => {
       const uid = decodedToken.uid;
       const users = await getAllUsersExceptCurrentUser(uid);
