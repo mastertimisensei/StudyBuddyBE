@@ -195,6 +195,19 @@ app2.post('/createUser', async (req, res) => {
   });
   
 
+  app2.get('/getAllOtherUsers2', async (req, res) => {
+    try {
+      const uid = req.headers.authorization.split('Bearer ')[1];
+      console.log(uid)
+      const users = await getAllUsersExceptCurrentUser(uid);
+      res.status(200).send(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error getting user data');
+    }
+  });
+
+
   // function to return the number of users
   app2.get('/countUsers', async (req, res) => {
     try {
