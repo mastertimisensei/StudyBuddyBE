@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block head %}{% endblock %}
+    {% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    {% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -23,12 +25,12 @@
     <main>
         {% block content %}{% endblock %}
     </main>
-    <div id="footer">
-    <footer>
         {% block footer %}
+        <div id="footer">
+        <footer>
             <p>&copy;2023 - Study Buddy</p>
-        {% endblock %}
-    </footer>
+        </footer>
     </div>
+        {% endblock %}
 </body>
 </html>

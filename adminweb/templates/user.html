@@ -4,7 +4,6 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -17,8 +16,9 @@
     <p>University : {{ user.university }} </p>
     <p>Bio : {{user.bio}}</p>
     <p> UserId : {{ user.uid }} </p>
+    <p><b> Buddies</b></p>
     {% for buddy in user.buddies %}
-        <p> Buddies : {{ buddy}} </p>
+        <p><a href="{{ url_for('getUserdata', uid=buddy.uid) }}">{{ buddy.name }}</a></p>
     {% endfor %}
     <!--Find the buddies names -->
     <button onclick="window.location.href='/user/edit'">Edit</button>
@@ -28,6 +28,5 @@
 
 {% block footer %}
     {{ super() }}
-    <p>Dashboard footer</p>
 {% endblock %}
 

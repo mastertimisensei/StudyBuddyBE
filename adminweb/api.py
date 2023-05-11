@@ -31,7 +31,7 @@ def login():
     password = request.form['password']
     loginurl = 'http://localhost:3000/signIn' #or 'https://studybuddy-backend.onrender.com/signIn'
     # post data to url
-    login = requests.post(loginurl, data={'email': username, 'password': password})
+    login = requests.post(loginurl, data={'email': username, 'password': password, 'flag':True})
     # check if login is successful
     print(login.status_code)
     if login.status_code == 200:
@@ -74,10 +74,9 @@ def getUserdata(uid):
             if buddy_post.status_code != 200:
                 return f"Error fetching user data: {buddy_post.status_code}"
             buddy_data = buddy_post.json()
-            data['buddies'][i] = buddy_data['name']
+            data['buddies'][i] = buddy_data
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
-    print(data)
     #show the user profile picture for that user
     showProfilePicurl = 'http://localhost:3000/showProfilePicture'
     showProfilePic = requests.post(showProfilePicurl, data={'uid': uid})

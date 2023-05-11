@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
     <h1>Study Buddy Admin Dashboard</h1>
     <p>We currently have {{ count_user }} users.</p>
     <form action="" method="GET">
-        <input type="text" name="search" placeholder="Search for user">
+        <input type="text" name="search" placeholder="Search for user" id = "search">
         <input type="submit" value="Search">
     </form>
     <table>
@@ -31,5 +35,4 @@
 
 {% block footer %}
     {{ super() }}
-    <p>Dashboard footer</p>
 {% endblock %}
