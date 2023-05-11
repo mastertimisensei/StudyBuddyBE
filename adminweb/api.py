@@ -33,6 +33,7 @@ def login():
     # post data to url
     login = requests.post(loginurl, data={'email': username, 'password': password})
     # check if login is successful
+    print(login.status_code)
     if login.status_code == 200:
         print('Login successful!')
         return redirect(url_for('dashboard'))
@@ -58,13 +59,22 @@ def dashboard():
 @login_required
 @app.route('/getUserdata/<string:uid>')
 def getUserdata(uid):
-    get_user_url = 'http://localhost:3000/getUserData'
+    get_user_url = 'http://localhost:3000/getAdminUserData'
     post = requests.post(get_user_url, data={'uid': uid})
 
     if post.status_code != 200:
         return f"Error fetching user data: {post.status_code}"
     try:
         data = post.json()
+        # get buddy names based on buddy ids
+        for i in range(len(data['buddies'])):
+            buddy = data['buddies'][i]
+            buddy_url = 'http://localhost:3000/getAdminUserData'
+            buddy_post = requests.post(buddy_url, data={'uid': buddy})
+            if buddy_post.status_code != 200:
+                return f"Error fetching user data: {buddy_post.status_code}"
+            buddy_data = buddy_post.json()
+            data['buddies'][i] = buddy_data['name']
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
     print(data)

@@ -1,6 +1,6 @@
 const {app, admin} = require('../firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
-const {getUserData} = require('./utilities');
+const {getUserData} = require('./utilities.js');
 
 async function signInWithEmail(email, password) {
   try {
@@ -12,7 +12,7 @@ async function signInWithEmail(email, password) {
     //get the user data
     const userData = await getUserData(user.uid);
     //add the token to the user data
-    userData.flag = flag;
+    flag = userData.flag;
     // return token and flag as json
     return {token, flag};
     //catch error
@@ -53,4 +53,4 @@ module.exports = {
     verifyIdToken
 };
 
-//signInWithEmail('jobavaw504@syinxun.com', 'password');
+signInWithEmail('jobavaw504@syinxun.com', 'password');

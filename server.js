@@ -154,6 +154,17 @@ app2.post('/createUser', async (req, res) => {
     }
   });
 
+
+  app2.post('/getAdminUserData', async (req, res) => {
+    const {uid} = req.body;
+    try {
+      const user = await getUserData(uid);
+      console.log(user);
+      res.status(200).send(user);
+    } catch (error) {
+      res.status(500).send('Error getting user data');
+    }
+  });
   // function to get all the user data except the current user
   app2.get('/getAllOtherUsers', async (req, res) => {
     try {
@@ -257,6 +268,28 @@ app2.post('/createUser', async (req, res) => {
       res.status(500).send('Error getting messages');
     }
   });*/
+
+  app2.post('/uploadProfilePicture', async (req, res) => {
+    const { uid, image } = req.body;
+    //image is a path to the image
+    try {
+      await uploadProfilePicture(uid, image);
+      res.status(200).send('Profile picture uploaded successfully');
+    } catch (error) {
+      res.status(500).send('Error uploading profile picture');
+    }
+  });
+
+  // function to show a profile picture
+  app2.post('/showProfilePicture', async (req, res) => {
+    const { uid } = req.body;
+    try {
+      const image = await showProfilePicture(uid);
+      res.status(200).send(image);
+    } catch (error) {
+      res.status(500).send('Error downloading profile picture');
+    }
+  });
 
 
   

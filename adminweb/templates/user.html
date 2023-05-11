@@ -2,19 +2,32 @@
 
 {% block title %}Dashboard{% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
 {% block content %}
-    <h1>User</h1>
+    <h1>{{ user.name }}</h1>
     <img src="{{pic}}" alt="Profile Picture">
     <p>Name: {{ user.name }}</p>
     <p>Email: {{ user.email }}</p>
     <p>Age: {{ user.age}} </p>
     <p>Major : {{ user.major }} </p>
     <p>University : {{ user.university }} </p>
+    <p>Bio : {{user.bio}}</p>
     <p> UserId : {{ user.uid }} </p>
-
+    {% for buddy in user.buddies %}
+        <p> Buddies : {{ buddy}} </p>
+    {% endfor %}
+    <!--Find the buddies names -->
+    <button onclick="window.location.href='/user/edit'">Edit</button>
+    <button onclick="window.location.href='/user/delete'">Delete</button>
 {% endblock %}
+
 
 {% block footer %}
     {{ super() }}
     <p>Dashboard footer</p>
 {% endblock %}
+
