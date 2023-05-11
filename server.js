@@ -19,10 +19,10 @@ app2.post('/createUser', async (req, res) => {
     return res.status(400).send('Request body is missing');
   }
 
-  const { name, email, password, flag} = req.body;
+  const { name, email, password} = req.body;
   
   try {
-    await createUser(name, email, password, flag);
+    await createUser(name, email, password);
     res.status(200).send('User created successfully');
     //res.status(200).send("No")
   } catch (error) {
