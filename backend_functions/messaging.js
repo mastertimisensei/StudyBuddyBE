@@ -128,4 +128,4 @@ getMessages('alexanderjohnson@fakemaill.com','sophiagarcia@fakemaill.com').then(
 //test listenForNewMessages
 //listenForNewMessages('RcUBX7PPEBM1QFUdmsU9');
 //listenForNewMessages('ywFefzpndETusBjCa0n8');
-module.exports = { messageBuddy, getMessages, Messagelisteners };
+//module.exports = { messageBuddy, getMessages, Messagelisteners };

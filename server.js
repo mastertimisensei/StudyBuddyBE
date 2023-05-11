@@ -5,7 +5,7 @@ const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
 const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList } = require('./backend_functions/utilities');
 const {swipeThem} = require('./backend_functions/match');
-const {messageBuddy, getMessages} = require('./backend_functions/messaging');
+//const {messageBuddy, getMessages} = require('./backend_functions/messaging');
 
 
 app2.use(bodyParser.json());
