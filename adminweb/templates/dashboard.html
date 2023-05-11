@@ -9,10 +9,13 @@
 {% block content %}
     <h1>Study Buddy Admin Dashboard</h1>
     <p>We currently have {{ count_user }} users.</p>
+    <div class = "form-center">
     <form action="" method="GET">
         <input type="text" name="search" placeholder="Search for user" id = "search">
         <input type="submit" value="Search">
     </form>
+    </div>
+    <div style="overflow-x:auto;">
     <table>
         <thead>
             <tr>
@@ -31,6 +34,8 @@
                 </tr>
             {% endfor %}
         </tbody>
+    </table>
+    </div>
 {% endblock %}
 
 {% block footer %}

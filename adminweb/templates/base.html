@@ -14,7 +14,7 @@
         {% block header %}
             <nav>
                 <ul>
-                    <li><a href="dashboard.html">Home</a></li>
+                    <li><a href="dashboard">Home</a></li>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
@@ -25,12 +25,9 @@
     <main>
         {% block content %}{% endblock %}
     </main>
-        {% block footer %}
-        <div id="footer">
-        <footer>
+    {% block footer %}
             <p>&copy;2023 - Study Buddy</p>
-        </footer>
-    </div>
-        {% endblock %}
+    {% endblock %}
+        
 </body>
 </html>
