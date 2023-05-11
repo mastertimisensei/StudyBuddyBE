@@ -3,7 +3,7 @@ const app2 = express();
 const bodyParser = require('body-parser');
 const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList } = require('./backend_functions/utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList, checkFlag } = require('./backend_functions/utilities');
 const {swipeThem} = require('./backend_functions/match');
 //const {messageBuddy, getMessages} = require('./backend_functions/messaging');
 
@@ -47,6 +47,19 @@ app2.post('/createUser', async (req, res) => {
 
   //sign in a user
   app2.post('/signIn', async (req, res) => {
+    const { email, password } = req.body;
+    const user = await signInWithEmail(email, password);
+    const flag = await checkFlag(email);
+    try {
+      res.status(200).json({token: user, flag: flag});
+    } catch (error) {
+      res.status(500).send(user);
+    }
+  });
+
+
+  /*
+  app2.post('/signIn', async (req, res) => {
 //     // Extract the token from the Authorization header
 //     const bearerToken = req.headers.authorization;
 //     if (!bearerToken || !bearerToken.startsWith('Bearer ')) {
@@ -58,14 +71,14 @@ app2.post('/createUser', async (req, res) => {
 //     const decodedToken = await verifyIdToken(idToken);
 
     // Sign in process..
-    const { email, password, flag } = req.body;
-    const user = await signInWithEmail(email, password, flag);
+    const { email, password} = req.body;
+    const user = await signInWithEmail(email, password);
     try {
       res.status(200).send(user);
     } catch (error) {
       res.status(500).send(user);
     }
-  });
+  });*/
 
   //sign out a user
   app2.post('/signOut', async (req, res) => {

@@ -2,6 +2,24 @@ const {app, admin} = require('../firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
 const {getUserData} = require('./utilities.js');
 
+
+async function signInWithEmail(email, password) {
+  try {
+    const auth = getAuth();
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    //get the token
+    const token = await user.getIdToken();
+    // return token
+    return token;
+    //catch error
+  } catch (error) {
+    console.error('Error signing in with email and password', error);
+  }
+}
+
+
+/*
 async function signInWithEmail(email, password) {
   try {
     const auth = getAuth();
@@ -10,17 +28,17 @@ async function signInWithEmail(email, password) {
     //get the token
     const token = await user.getIdToken();
     //get the user data
-    const userData = await getUserData(user.uid);
+   // const userData = await getUserData(user.uid);
     //add the token to the user data
-    flag = userData.flag;
+    //let flag = true;
     // return token and flag as json
-    return {token, flag};
+    return token;
     //catch error
   } catch (error) {
     console.error('Error signing in with email and password', error);
   }
 }
-
+*/
 async function verifyIdToken(idToken) {
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
@@ -53,4 +71,4 @@ module.exports = {
     verifyIdToken
 };
 
-signInWithEmail('jobavaw504@syinxun.com', 'password');
+//console.log(signInWithEmail('masonkim@fakemaill.com', 'password'));

@@ -285,6 +285,14 @@ const removeUserFromBuddyList = async (email, buddy_email) => {
 };
 
 
+const checkFlag = async (email) => {
+    const userRef = admin.firestore().collection('users').doc(email);
+    const user = await userRef.get();
+    const flag = user.data().flag;
+    return flag;
+};
+
+
 
 /*
 showProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82').then((url) => {
@@ -308,6 +316,7 @@ module.exports = {
     getAllUsersExceptCurrentUser,
     uploadProfilePicture,
     showProfilePicture,
-    removeUserFromBuddyList
+    removeUserFromBuddyList,
+    checkFlag
 };
 
