@@ -47,6 +47,17 @@ app2.post('/createUser', async (req, res) => {
 
   //sign in a user
   app2.post('/signIn', async (req, res) => {
+    // Extract the token from the Authorization header
+    const bearerToken = req.headers.authorization;
+    if (!bearerToken || !bearerToken.startsWith('Bearer ')) {
+      return res.status(401).send('Unauthorized');
+    }
+    const idToken = bearerToken.split('Bearer ')[1];
+
+    // Verify the token
+    const decodedToken = await verifyIdToken(idToken);
+
+    // Sign in process..
     const { email, password, flag } = req.body;
     const user = await signInWithEmail(email, password, flag);
     try {
