@@ -6,7 +6,6 @@ const { getStorage } = require('firebase-admin/storage');
 
 const fs = require('fs');
 const { firestore } = require('firebase-admin');
-
 //function to message a buddy
 
 async function messageBuddy(email, buddyEmail, message) {
@@ -48,12 +47,12 @@ async function messageBuddy(email, buddyEmail, message) {
 }
 
 // test messageBuddy
-messageBuddy('jobavaw504@syinxun.com','ameliasmith@fakemaill.com', 'text message');
-
+messageBuddy('jobavaw504@syinxun.com','ameliasmith@fakemaill.com', 'No cap, I am a real person');
+messageBuddy('jobavaw504@syinxun.com','danielmartinez@fakemaill.com', 'No cap, I am a AI');
 
 
 //function to get messages between two users(for admin side)
-
+/*
 async function getMessages(email, buddyEmail) {
     // get the user reference
     //console.log(email + buddyEmail);
@@ -68,11 +67,12 @@ async function getMessages(email, buddyEmail) {
         // get the message document
         const messageDoc = await messageRef.collection('message').orderBy("time","asc").get();
         // order the messages by time
-        //messageDoc.orderBy("time");
         // return the message document
-        text = "[";
+        var text = "[";
+        console.log(messageDoc);
         messageDoc.forEach((doc) => {
             // add the messages to text in json format
+            console.log(doc.data());
             text += JSON.stringify(doc.data()) + ",";
         });
         // remove the last comma
@@ -88,31 +88,44 @@ async function getMessages(email, buddyEmail) {
 }
 /*
 function listenForNewMessages(chatId) {
-    const messageRef = admin.firestore().collection('messages').doc(chatId).collection('message');
-    messageRef.orderBy("time").onSnapshot((querySnapshot) => {
-      querySnapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          // Handle new message added to the chat
-          const message = change.doc.data();
-          console.log("New message:", message);
-  
-          //const messageElement = document.createElement('div');
-          //messageElement.textContent = message.text;
-          //document.getElementById('messages').appendChild(messageElement);
-        }
-      });
+    return new Promise((resolve, reject) => {
+      const messageRef = admin.firestore().collection('messages').doc(chatId).collection('messages');
+      const unsubscribe = messageRef.orderBy("time").onSnapshot((querySnapshot) => {
+        querySnapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            const message = change.doc.data();
+            resolve({
+              timestamp: message.time.toDate(),
+              text: message.text,
+              sender: message.sender,
+              // Add more fields as needed
+            });
+          }
+        });
+      }
+      );
+      //Messagelisteners[chatId] = unsubscribe;
     });
   }
-*/
-// test getMessages
+
+// stop listening for new messages
 /*
-getMessages('abigailjones@fakemaill.com','jobavaw504@syinxun.com').then((data) => {
+function stopListeningForNewMessages(chatId) {
+    if (Messagelisteners[chatId]) {
+        Messagelisteners[chatId]();
+        delete Messagelisteners[chatId];
+    }
+}*/
+
+//test getMessages
+
+/*
+getMessages('alexanderjohnson@fakemaill.com','sophiagarcia@fakemaill.com').then((data) => {
     console.log(data);
 }
 );*/
-// test listenForNewMessages
-//listenForNewMessages('abigailjones@fakemaill.comjobavaw504@syinxun.com');
 
-//module.exports = { messageBuddy, getMessages, listenForNewMessages };
-
-module.exports = { messageBuddy, getMessages };
+//test listenForNewMessages
+//listenForNewMessages('RcUBX7PPEBM1QFUdmsU9');
+//listenForNewMessages('ywFefzpndETusBjCa0n8');
+module.exports = { messageBuddy, getMessages, Messagelisteners };

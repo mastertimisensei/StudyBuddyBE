@@ -5,7 +5,8 @@ const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
 const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList } = require('./backend_functions/utilities');
 const {swipeThem} = require('./backend_functions/match');
-const {messageBuddy} = require('./backend_functions/messaging');
+const {messageBuddy, getMessages} = require('./backend_functions/messaging');
+
 
 app2.use(bodyParser.json());
 
@@ -18,10 +19,10 @@ app2.post('/createUser', async (req, res) => {
     return res.status(400).send('Request body is missing');
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, flag} = req.body;
   
   try {
-    await createUser(name, email, password);
+    await createUser(name, email, password, flag);
     res.status(200).send('User created successfully');
     //res.status(200).send("No")
   } catch (error) {
@@ -47,7 +48,7 @@ app2.post('/createUser', async (req, res) => {
   //sign in a user
   app2.post('/signIn', async (req, res) => {
     const { email, password, flag } = req.body;
-    const user = await signInWithEmail(email, password);
+    const user = await signInWithEmail(email, password, flag);
     try {
       res.status(200).json({ token: user});
     } catch (error) {
@@ -106,7 +107,7 @@ app2.post('/createUser', async (req, res) => {
       const uid = (await verifyIdToken(token)).uid;
       console.log(uid);
       try {
-      await setUserData(uid,name, age, Language,Major, InterestedSubjects, Location,University, bio, photoUrl);
+      await setUserData(uid,name, age, Language,Major, InterestedSubjects, Location,University, bio, photoUrl, flag);
       } catch (error) {
         res.status(500).send('Error setting user data');
       }
@@ -158,31 +159,6 @@ app2.post('/createUser', async (req, res) => {
     }
   });
   
-  
-
-  // function to upload a profile picture
-  /*
-  app2.post('/uploadProfilePicture', async (req, res) => {
-    const { uid, image } = req.body;
-    //image is a path to the image
-    try {
-      await uploadProfilePicture(uid, image);
-      res.status(200).send('Profile picture uploaded successfully');
-    } catch (error) {
-      res.status(500).send('Error uploading profile picture');
-    }
-  });
-
-  // function to show a profile picture
-  app2.post('/showProfilePicture', async (req, res) => {
-    const { uid } = req.body;
-    try {
-      const image = await showProfilePicture(uid);
-      res.status(200).send(image);
-    } catch (error) {
-      res.status(500).send('Error downloading profile picture');
-    }
-  });*/
 
   // function to return the number of users
   app2.get('/countUsers', async (req, res) => {
@@ -195,18 +171,18 @@ app2.post('/createUser', async (req, res) => {
       res.status(500).send('Error counting users');
     }
   });
-
+/*
   // function for a user send message to a buddy
   app2.post('/sendMessage', async (req, res) => {
     const { token, buddy_email, message } = req.body;
     try {
-      const uid = (await verifyIdToken(token)).email;
-      await sendMessage(email, buddy_email, message);
+      const email = (await verifyIdToken(token)).email;
+      await messageBuddy(email, buddy_email, message);
       res.status(200).send('Message sent successfully');
     } catch (error) {
       res.status(500).send('Error sending message');
     }
-  });
+  });*/
 
   // function for the swiping feature
   app2.post('/swipe', async (req, res) => {
@@ -257,6 +233,19 @@ app2.post('/createUser', async (req, res) => {
     }
   });
 
+  // function to get the messages
+  /*
+  app2.post('/getMessages', async (req, res) => {
+    const { token, buddy_email } = req.body;
+    try {
+      const email = (await verifyIdToken(token)).email;
+      const messages = await getMessages(email, buddy_email);
+      console.log(messages);
+      res.status(200).send(messages);
+    } catch (error) {
+      res.status(500).send('Error getting messages');
+    }
+  });*/
 
 
   
