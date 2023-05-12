@@ -268,6 +268,18 @@ app2.post('/createUser', async (req, res) => {
     }
   });
 
+// function to get data based on uid for buddy data
+app2.get('/getUserData/:uid', async (req, res) => {
+    const uid = req.params.uid;
+    try {
+      const user = await getUserData(uid);
+      console.log(user);
+      res.status(200).send(user);
+    } catch (error) {
+      res.status(500).send('Error getting user data');
+    }
+});
+
   // functions to remove a buddy
   app2.post('/removeBuddy', async (req, res) => {
     const { token, buddy_email } = req.body;
