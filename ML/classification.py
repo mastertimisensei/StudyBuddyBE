@@ -42,8 +42,3 @@ def get_cosine_similarity(bio1, bio2):
     similarity = dot_product / (math.sqrt(mag1) * math.sqrt(mag2))
     
     return similarity
-
-text1 = "The queen has jumps oogwat the do"
-text2 = "A quick brown dog jumps over the lazy cat"
-similarity_score = get_cosine_similarity(text1, text2)
-print(similarity_score)

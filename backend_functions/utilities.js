@@ -202,21 +202,21 @@ const getUserData = async (uid) => {
 
 
 // function to get all the users except the current user, the user's matches and the people who the user has already swiped
-const getAllUsersExceptCurrentUser = async (email) => {
+const getAllUsersExceptCurrentUser = async (uid) => {
     const usersData = [];
     const users = await getAllUsersData();
     // loop through all the users
     for (let i = 0; i < users.length; i++) {
-        // if the user is not the current user, the user's matches and the people who the user has already swiped
-        if (users[i].email !== email && !users[i].buddies.includes(email) && !users[i].swipedThem.includes(email) && !users[i].notMatches.includes(email)) {
-            // push the user data to the usersData array
-            usersData.push(users[i]);
-        }
+      // if the user is not the current user, the user's matches and the people who the user has already swiped
+      if (users[i].uid !== uid && !users[i].buddies.includes(uid)) {
+        // push the user data to the usersData array
+        usersData.push(users[i]);
+      }
     }
     //convert user data to json
     const usersDataJson = JSON.stringify(usersData);
     return usersDataJson;
-};
+  };
 
 
 
