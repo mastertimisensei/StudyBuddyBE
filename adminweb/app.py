@@ -24,16 +24,22 @@ def index():
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['username']
+    email = request.form['email']
     password = request.form['password']
     loginurl = 'https://studybuddy-backend.onrender.com/signIn' #or 'https://studybuddy-backend.onrender.com/signIn'
     # post data to url
-    login = requests.post(loginurl, data={'email': username, 'password': password, 'flag':True})
+    login = requests.post(loginurl, data={'email': email, 'password': password, 'flag':True})
     # check if login is successful
     print(login.status_code)
     if login.status_code == 200:
-        print('Login successful!')
-        return redirect(url_for('dashboard'))
+            url = 'https://studybuddy-backend.onrender.com/getUserData'
+            post = requests.post(url, data={'token': login.json()['token']})
+            post = post.json()
+            if (True):
+                print('Login successful!')
+                return redirect(url_for('dashboard'))
+            else:
+                return "Unauthorized Access to Admin Dashboard!"
     else:
         print('Login failed!')
         return render_template('login.html', error='Invalid username or password!')

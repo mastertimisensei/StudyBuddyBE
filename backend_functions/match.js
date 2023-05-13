@@ -41,38 +41,11 @@ async function swipeThem(email, buddy_email, swipe = true) {
                 swipedMe = Array.from(swipedMe);
                 swipedMe = new Set(swipedMe);
                 transaction.update(buddyRef, { swipedMe: Array.from(swipedMe) });
-            } else {
-                // Add buddy to user's notMatches set
-                let notMatches = new Set(userDoc.data().notMatches || []);
-                notMatches.add(buddy_uid);
-                notMatches = Array.from(notMatches);
-                notMatches = new Set(notMatches);
-                transaction.update(userRef, { notMatches: Array.from(notMatches) });
-    
-                // Add user to buddy's notMatches set
-                let notMatchesBud = new Set(buddyDoc.data().notMatches || []);
-                notMatchesBud.add(uid);
-                notMatchesBud = Array.from(notMatchesBud);
-                notMatchesBud = new Set(notMatchesBud);
-                transaction.update(buddyRef, { notMatches: Array.from(notMatchesBud) });
-    
-                // Remove user from buddy's swipedMe set
-                const swipedMe = new Set(buddyDoc.data().swipedMe || []);
-                swipedMe.delete(uid);
-                transaction.update(buddyRef, { swipedMe: Array.from(swipedMe) });
-    
-                // Remove buddy from user's swipedThem set
-                const swipedThem = new Set(userDoc.data().swipedThem || []);
-                swipedThem.delete(buddy_uid);
-                transaction.update(userRef, { swipedThem: Array.from(swipedThem) });
-            }
-    
+            } 
             // Check for a match
             const swipedThem = new Set(userDoc.data().swipedThem || []);
             const swipedMe = new Set(buddyDoc.data().swipedMe || []);
-            const notMatches = new Set(userDoc.data().notMatches || []);
-            const notMatchesBud = new Set(buddyDoc.data().notMatches || []);
-            const hasMatch = swipedThem.has(buddy_uid) && swipedMe.has(uid) && !notMatches.has(buddy_uid) && !notMatchesBud.has(uid);
+            const hasMatch = swipedThem.has(buddy_uid) && swipedMe.has(uid);
             
             if (hasMatch) {
                 const buddies = new Set(userDoc.data().buddies || []);

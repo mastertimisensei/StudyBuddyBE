@@ -208,7 +208,7 @@ const getAllUsersExceptCurrentUser = async (uid) => {
     // loop through all the users
     for (let i = 0; i < users.length; i++) {
       // if the user is not the current user, the user's matches and the people who the user has already swiped
-      if (users[i].uid !== uid && !users[i].buddies.includes(uid)) {
+      if (users[i].uid !== uid && !users[i].buddies.includes(uid) && !users[i].swipedThem.includes(uid)) {
         // push the user data to the usersData array
         usersData.push(users[i]);
       }
