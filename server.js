@@ -5,6 +5,7 @@ const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
 const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList, checkFlag } = require('./backend_functions/utilities');
 const {swipeThem} = require('./backend_functions/match');
+const {PythonShell} = require('python-shell');
 //const {messageBuddy, getMessages} = require('./backend_functions/messaging');
 
 
@@ -329,6 +330,11 @@ app2.get('/getUserData/:uid', async (req, res) => {
     }
   });
 
+  // function to show recommendation score for buddies using a python shell and a python script
+  /*
+  app2.post('/showRecommendationScore', async (req, res) => {
+    const { token, uid } = req.body;
+*/
 
   
 app2.listen(PORT, () => {

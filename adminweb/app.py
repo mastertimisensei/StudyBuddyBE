@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, current_user, login_required
 import requests
 import firebase_admin
+import ML.classification as classification
+import ML.checker as checker
 
 app = Flask(__name__)
 
@@ -18,7 +20,7 @@ users = {
 @login_manager.user_loader
 def load_user(user_id):
     # Load the user from your database
-    #loginurl = 'http://localhost:3000/signIn' #or 'https://studybuddy-backend.onrender.com/signIn'
+    #loginurl = 'https://studybuddy-backend.onrender.com/signIn' #or 'https://studybuddy-backend.onrender.com/signIn'
     return user_id
 
 @app.route('/')
@@ -29,7 +31,7 @@ def index():
 def login():
     username = request.form['username']
     password = request.form['password']
-    loginurl = 'http://localhost:3000/signIn' #or 'https://studybuddy-backend.onrender.com/signIn'
+    loginurl = 'https://studybuddy-backend.onrender.com/signIn' #or 'https://studybuddy-backend.onrender.com/signIn'
     # post data to url
     login = requests.post(loginurl, data={'email': username, 'password': password, 'flag':True})
     # check if login is successful
@@ -44,8 +46,8 @@ def login():
 @login_required
 @app.route('/dashboard')
 def dashboard():
-    count_user_url = 'http://localhost:3000/countUsers' #or 'https://studybuddy-backend.onrender.com/countUsers'
-    get_user_url = 'http://localhost:3000/getAllUsersData' #or 'https://studybuddy-backend.onrender.com/getUsers'
+    count_user_url = 'https://studybuddy-backend.onrender.com/countUsers' #or 'https://studybuddy-backend.onrender.com/countUsers'
+    get_user_url = 'https://studybuddy-backend.onrender.com/getAllUsersData' #or 'https://studybuddy-backend.onrender.com/getUsers'
     # get data from url
     count_user = requests.get(count_user_url)
     get_user = requests.get(get_user_url)
@@ -59,7 +61,7 @@ def dashboard():
 @login_required
 @app.route('/getUserdata/<string:uid>')
 def getUserdata(uid):
-    get_user_url = 'http://localhost:3000/getAdminUserData'
+    get_user_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
     post = requests.post(get_user_url, data={'uid': uid})
 
     if post.status_code != 200:
@@ -69,7 +71,7 @@ def getUserdata(uid):
         # get buddy names based on buddy ids
         for i in range(len(data['buddies'])):
             buddy = data['buddies'][i]
-            buddy_url = 'http://localhost:3000/getAdminUserData'
+            buddy_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
             buddy_post = requests.post(buddy_url, data={'uid': buddy})
             if buddy_post.status_code != 200:
                 return f"Error fetching user data: {buddy_post.status_code}"
@@ -78,7 +80,7 @@ def getUserdata(uid):
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
     #show the user profile picture for that user
-    showProfilePicurl = 'http://localhost:3000/showProfilePicture'
+    showProfilePicurl = 'https://studybuddy-backend.onrender.com/showProfilePicture'
     showProfilePic = requests.post(showProfilePicurl, data={'uid': uid})
     pic = None
     if showProfilePic.status_code != 200:
@@ -88,6 +90,34 @@ def getUserdata(uid):
         pic = showProfilePic.json()
     return render_template('user.html', user=data, pic=pic[0])
 
+@app.route('/showRecommendationScore', methods=['POST'])
+def show_recommendation_score():
+    data = request.get_json()
+    uid = data['uid']
+    buddy_uid = data['buddy_uid']
+    #get user data from getAdminUserData endpoint
+    get_user_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
+    post1 = requests.post(get_user_url, data={'uid': uid})
+    post2 = requests.post(get_user_url, data={'uid': buddy_uid})
+    if post1.status_code != 200:
+        return f"Error fetching user data: {post1.status_code}"
+    if post2.status_code != 200:
+        return f"Error fetching user data: {post2.status_code}"
+    try:
+        data1 = post1.json()
+        #print(data1)
+        data2 = post2.json()
+        #print(data2)
+        # generate the prompt
+        prompt = checker.generate_prompt(data1, data2)
+        print(prompt)
+        # get the score
+        response = checker.get_response(prompt)
+        return response
+
+    except ValueError as e:
+        return f"Error parsing response as JSON: {e}"
+    
 
 
 
