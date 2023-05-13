@@ -1,10 +1,11 @@
 import json
 import openai
 import ML.classification as classification
-
+import ML.hidden_key as hidden_key
 # Set up the model and prompt
 model_engine = "gpt-3.5-turbo"
 
+openai.api_key = hidden_key.hidden_key
 # dont forget to set your openai api key
 
 def json_to_string(json_obj):
