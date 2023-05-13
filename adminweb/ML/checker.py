@@ -1,7 +1,7 @@
 import json
 import openai
 import ML.classification as classification
-import ML.hidden_key as hidden_key
+import hidden_key
 # Set up the model and prompt
 model_engine = "gpt-3.5-turbo"
 
