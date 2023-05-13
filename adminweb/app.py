@@ -41,8 +41,8 @@ def login():
 @login_required
 @app.route('/dashboard')
 def dashboard():
-    count_user_url = 'https://studybuddy-backend.onrender.com/countUsers' #or 'https://studybuddy-backend.onrender.com/countUsers'
-    get_user_url = 'https://studybuddy-backend.onrender.com/getAllUsersData' #or 'https://studybuddy-backend.onrender.com/getUsers'
+    count_user_url = 'https://studybuddy-backend.onrender.com/countUsers' #or 'localhost:3000/countUsers'
+    get_user_url = 'https://studybuddy-backend.onrender.com/getAllUsersData' #or 'localhost:3000/getUsers'
     # get data from url
     count_user = requests.get(count_user_url)
     get_user = requests.get(get_user_url)
