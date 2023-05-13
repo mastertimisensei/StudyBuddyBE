@@ -11,11 +11,6 @@ app = Flask(__name__)
 login_manager = LoginManager(app)
 
 # A dictionary to store the user credentials
-users = {
-    'user1': 'password1',
-    'user2': 'password2',
-    'user3': 'password3'
-}
 
 @login_manager.user_loader
 def load_user(user_id):
