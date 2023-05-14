@@ -31,9 +31,11 @@ async function messageBuddy(email, buddyEmail, message) {
             messagesMap[buddyEmail] = messageRef.id;
             await userRef.update({ messages: messagesMap });
             messageId = messageRef.id;
+            let buddyMessagesMap = buddyDoc.data().messages || {};
             // add the message id to the buddy's messages map
-            messagesMap[email] = messageRef.id;
-            await buddyRef.update({ messages: messagesMap });
+            buddyMessagesMap[email] = messageRef.id;
+            //
+            await buddyRef.update({ messages: buddyMessagesMap });
         }
 
     // add the new message to the subcollection of the message document
@@ -56,38 +58,26 @@ async function messageBuddy(email, buddyEmail, message) {
 
 
 async function getMessages(email, buddyEmail) {
-    // get the user reference
-    //console.log(email + buddyEmail);
     const userRef = admin.firestore().collection('users').doc(email);
-    // get messages from the userRef
     const userDoc = await userRef.get();
-    // check if the buddy email is part of the messages map
 
-    if (userDoc.data().messages[buddyEmail] !== null) {
-        // get the message reference
+    if (userDoc.exists && userDoc.data().messages && userDoc.data().messages[buddyEmail]) {
         const messageRef = admin.firestore().collection('messages').doc(userDoc.data().messages[buddyEmail]);
-        // get the message document
-        const messageDoc = await messageRef.collection('message').orderBy("time","asc").get();
-        // order the messages by time
-        // return the message document
-        var text = "[";
-        console.log(messageDoc);
-        messageDoc.forEach((doc) => {
-            // add the messages to text in json format
-            console.log(doc.data());
-            text += JSON.stringify(doc.data()) + ",";
+        const messageDoc = await messageRef.collection('messages').orderBy("time", "asc").get();
+        let messages = "[";
+        messageDoc.forEach(doc => {
+            const message = doc.data();
+            const time = message.time.toDate().toISOString().replace('T', ' ').substr(0, 19);
+            messages += `{ "time": "${time}", "message": "${message.message}", "sender": "${message.from}" },`;
         });
-        // remove the last comma
-        text = text.slice(0, -1);
-        text += "]";
-        //console.log(text);
-        //return text;
-        //return messageDoc.data().message;
+        messages = messages.slice(0, -1) + "]";
+        return messages;
     }
-    // if the message does not exist, return null
+
     console.log("No messages");
     return null;
 }
+
 /*
 function listenForNewMessages(chatId) {
     return new Promise((resolve, reject) => {

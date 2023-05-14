@@ -41,4 +41,8 @@ sleep(5000).then(() => {
 
 
 //messageBuddy('abigailjones@fakemaill.com','jobavaw504syinxuncom', 'text message');
-getMessages('seconduser@test.com','firsuser@test.com');
+getMessages('seconduser@gmail.com','firstuser@gmail.com').then((messages) => {
+    console.log(messages);
+}
+);
+
