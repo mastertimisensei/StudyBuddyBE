@@ -51,8 +51,7 @@ messageBuddy('jobavaw504@syinxun.com','ameliasmith@fakemaill.com', 'No cap, I am
 messageBuddy('jobavaw504@syinxun.com','danielmartinez@fakemaill.com', 'No cap, I am a AI');
 
 
-//function to get messages between two users(for admin side)
-/*
+
 async function getMessages(email, buddyEmail) {
     // get the user reference
     //console.log(email + buddyEmail);
@@ -128,4 +127,4 @@ getMessages('alexanderjohnson@fakemaill.com','sophiagarcia@fakemaill.com').then(
 //test listenForNewMessages
 //listenForNewMessages('RcUBX7PPEBM1QFUdmsU9');
 //listenForNewMessages('ywFefzpndETusBjCa0n8');
-//module.exports = { messageBuddy, getMessages, Messagelisteners };
+module.exports = { messageBuddy, getMessages };

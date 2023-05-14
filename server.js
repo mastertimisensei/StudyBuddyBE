@@ -295,7 +295,7 @@ app2.get('/getUserData/:uid', async (req, res) => {
   });
 
   // function to get the messages
-  /*
+  
   app2.post('/getMessages', async (req, res) => {
     const { token, buddy_email } = req.body;
     try {
@@ -306,7 +306,7 @@ app2.get('/getUserData/:uid', async (req, res) => {
     } catch (error) {
       res.status(500).send('Error getting messages');
     }
-  });*/
+  });
 
   app2.post('/uploadProfilePicture', async (req, res) => {
     const { uid, image } = req.body;
