@@ -44,16 +44,6 @@ async function createUser(name,email, password, Location = "", set = null, flag 
     } catch (error) {
       console.error('Error creating new user:', error);
     }
-    //send verification email
-    
-    try {
-      const userRecord = await admin.auth().getUserByEmail(email);
-      await admin.auth().generateEmailVerificationLink(email);
-      //send the verification email
-      console.log('Successfully sent verification email to:', userRecord.uid);
-  } catch (error) {
-      console.error('Error sending verification email:', error);
-  }
   }
 
 

@@ -53,10 +53,6 @@ async function getUserUid(email) {
     }
 }
 
-//sleep function
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // Function for updating a user's password
 const updateUserPassword =  (uid, password) => {
@@ -294,12 +290,6 @@ const checkFlag = async (email) => {
 
 
 
-/*
-showProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82').then((url) => {
-    console.log(url);
-});
-*/
-
 
 module.exports = {
     checkUserLoggedIn,
@@ -311,7 +301,6 @@ module.exports = {
     deleteAllUsers,
     setUserData,
     getUserData,
-    sleep,
     getAllUsersData,
     getAllUsersExceptCurrentUser,
     uploadProfilePicture,
