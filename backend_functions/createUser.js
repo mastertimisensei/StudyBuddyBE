@@ -28,7 +28,6 @@ async function createUser(name,email, password, Location = "", set = null, flag 
             buddies: [],
             swipedThem: [],
             swipedMe: [],
-            notMatches: [],
             photoUrl: "",
             Language: [],
             Location: Location,
