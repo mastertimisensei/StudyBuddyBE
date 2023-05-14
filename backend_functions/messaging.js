@@ -82,7 +82,7 @@ async function getMessages(email, buddyEmail) {
         text += "]";
         //console.log(text);
         //return text;
-        return messageDoc.data().message;
+        //return messageDoc.data().message;
     }
     // if the message does not exist, return null
     console.log("No messages");

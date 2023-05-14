@@ -41,5 +41,4 @@ sleep(5000).then(() => {
 
 
 //messageBuddy('abigailjones@fakemaill.com','jobavaw504syinxuncom', 'text message');
-messagesBuddy('seconduser@test.com','firsuser@test.com',"Hello there!");
-deleteAllUsers();
+getMessages('seconduser@test.com','firsuser@test.com');
