@@ -46,17 +46,11 @@ async function swipeThem(email, buddy_email, swipe) {
         let newBuddyDoc = await buddyRef.get();
         const swipedThem = new Set(newUserDoc.data().swipedThem || []);
         const swipedMe = new Set(newUserDoc.data().swipedMe || []);
-        console.log("swipedThem: " + Array.from(swipedThem));
-        console.log("swipedMe: " + Array.from(swipedMe));
         const hasMatch = swipedThem.has(buddy_uid) && swipedMe.has(buddy_uid);
-        console.log("swipedThem.has(buddy_uid): " + swipedThem.has(buddy_uid));
-        console.log("swipedMe.has(buddy_uid): " + swipedMe.has(buddy_uid));
-        console.log("Has match: " + hasMatch);
         
         if (hasMatch) {
             const buddies = new Set(userDoc.data().buddies || []);
             const buddybuddies = new Set(buddyDoc.data().buddies || []);
-            const timestamp = admin.firestore.Timestamp.now();
 
             // Update user's matches
             buddies.add(buddy_uid);
