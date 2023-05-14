@@ -47,49 +47,57 @@ def login():
 @login_required
 @app.route('/dashboard')
 def dashboard():
-    count_user_url = 'https://studybuddy-backend.onrender.com/countUsers' #or 'localhost:3000/countUsers'
-    get_user_url = 'https://studybuddy-backend.onrender.com/getAllUsersData' #or 'localhost:3000/getUsers'
-    # get data from url
-    count_user = requests.get(count_user_url)
-    get_user = requests.get(get_user_url)
-    # convert to json
-    count_user = count_user.json()
-    count_user = count_user['users']
-    get_user = get_user.json()
-    # render the template
-    return render_template('dashboard.html', count_user=count_user, users=get_user)
+    #check if the user is logged in
+    if not current_user.is_authenticated:
+        count_user_url = 'https://studybuddy-backend.onrender.com/countUsers' #or 'localhost:3000/countUsers'
+        get_user_url = 'https://studybuddy-backend.onrender.com/getAllUsersData' #or 'localhost:3000/getUsers'
+        # get data from url
+        count_user = requests.get(count_user_url)
+        get_user = requests.get(get_user_url)
+        # convert to json
+        count_user = count_user.json()
+        count_user = count_user['users']
+        get_user = get_user.json()
+        # render the template
+        return render_template('dashboard.html', count_user=count_user, users=get_user)
+    else:
+        return "Unauthorized Access to Admin Dashboard!"
 
 @login_required
 @app.route('/getUserdata/<string:uid>')
 def getUserdata(uid):
-    get_user_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
-    post = requests.post(get_user_url, data={'uid': uid})
+    #check if the user is logged in
+    if not current_user.is_authenticated:
+        get_user_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
+        post = requests.post(get_user_url, data={'uid': uid})
 
-    if post.status_code != 200:
-        return f"Error fetching user data: {post.status_code}"
-    try:
-        data = post.json()
-        # get buddy names based on buddy ids
-        for i in range(len(data['buddies'])):
-            buddy = data['buddies'][i]
-            buddy_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
-            buddy_post = requests.post(buddy_url, data={'uid': buddy})
-            if buddy_post.status_code != 200:
-                return f"Error fetching user data: {buddy_post.status_code}"
-            buddy_data = buddy_post.json()
-            data['buddies'][i] = buddy_data
-    except ValueError as e:
-        return f"Error parsing response as JSON: {e}"
-    #show the user profile picture for that user
-    showProfilePicurl = 'https://studybuddy-backend.onrender.com/showProfilePicture'
-    showProfilePic = requests.post(showProfilePicurl, data={'uid': uid})
-    pic = None
-    if showProfilePic.status_code != 200:
-        print("No profile picture found")
+        if post.status_code != 200:
+            return f"Error fetching user data: {post.status_code}"
+        try:
+            data = post.json()
+            # get buddy names based on buddy ids
+            for i in range(len(data['buddies'])):
+                buddy = data['buddies'][i]
+                buddy_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
+                buddy_post = requests.post(buddy_url, data={'uid': buddy})
+                if buddy_post.status_code != 200:
+                    return f"Error fetching user data: {buddy_post.status_code}"
+                buddy_data = buddy_post.json()
+                data['buddies'][i] = buddy_data
+        except ValueError as e:
+            return f"Error parsing response as JSON: {e}"
+        #show the user profile picture for that user
+        showProfilePicurl = 'https://studybuddy-backend.onrender.com/showProfilePicture'
+        showProfilePic = requests.post(showProfilePicurl, data={'uid': uid})
+        pic = None
+        if showProfilePic.status_code != 200:
+            print("No profile picture found")
+        else:
+            print ("Profile picture found")
+            pic = showProfilePic.json()
+        return render_template('user.html', user=data, pic=pic[0])
     else:
-        print ("Profile picture found")
-        pic = showProfilePic.json()
-    return render_template('user.html', user=data, pic=pic[0])
+        return "Unauthorized Access to Admin Dashboard!"
 
 @app.route('/showRecommendationScore', methods=['POST'])
 def show_recommendation_score():
