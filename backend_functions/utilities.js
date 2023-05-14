@@ -217,13 +217,14 @@ const getAllUsersExceptCurrentUser = async (uid) => {
 
 
 // function for uploading a user's profile picture to the storage
-const uploadProfilePicture = async (uid, filePath) => {
+const uploadProfilePicture = async (uid, uri) => {
     const email = await getUserEmail(uid);
     const storage = getStorage();
     const storageRef = storage.bucket();
     const fileRef = storageRef.file(`profilePics/${uid}`);
   
-    const fileBuffer = fs.readFileSync(filePath);
+    const response = await fetch(uri);
+    const fileBuffer = await response.buffer();
   
     const stream = fileRef.createWriteStream({
       metadata: {
@@ -240,6 +241,7 @@ const uploadProfilePicture = async (uid, filePath) => {
     });
   
     stream.end(fileBuffer);
+    
     // update the user's profile picture url in firestore
     admin.firestore().collection('users').doc(email).update({
         photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
@@ -272,7 +274,7 @@ const removeUserFromBuddyList = async (email, buddy_email) => {
     const user_uid = await getUserUid(email);
     // remove the buddy from the user's buddy list
     await userRef.update({
-        buddies: admin.firestore.FieldValue.arrayRemove(buddy_uid)
+        buddies: admin.firestore.FieldValue.arrayRemove(buddy_uid),
     });
     // remove the user from the buddy's buddy list
     await buddyRef.update({
