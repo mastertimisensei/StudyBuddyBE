@@ -31,6 +31,9 @@ async function messageBuddy(email, buddyEmail, message) {
             messagesMap[buddyEmail] = messageRef.id;
             await userRef.update({ messages: messagesMap });
             messageId = messageRef.id;
+            // add the message id to the buddy's messages map
+            messagesMap[email] = messageRef.id;
+            await buddyRef.update({ messages: messagesMap });
         }
 
     // add the new message to the subcollection of the message document
@@ -47,8 +50,8 @@ async function messageBuddy(email, buddyEmail, message) {
 }
 
 // test messageBuddy
-messageBuddy('jobavaw504@syinxun.com','ameliasmith@fakemaill.com', 'No cap, I am a real person');
-messageBuddy('jobavaw504@syinxun.com','danielmartinez@fakemaill.com', 'No cap, I am a AI');
+//messageBuddy('jobavaw504@syinxun.com','ameliasmith@fakemaill.com', 'No cap, I am a real person');
+//messageBuddy('jobavaw504@syinxun.com','danielmartinez@fakemaill.com', 'No cap, I am a AI');
 
 
 
@@ -78,8 +81,8 @@ async function getMessages(email, buddyEmail) {
         text = text.slice(0, -1);
         text += "]";
         //console.log(text);
-        return text;
-        // return messageDoc.data().message;
+        //return text;
+        return messageDoc.data().message;
     }
     // if the message does not exist, return null
     console.log("No messages");
