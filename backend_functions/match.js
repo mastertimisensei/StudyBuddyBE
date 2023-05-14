@@ -31,16 +31,14 @@ async function swipeThem(email, buddy_email, swipe ) {
                 let swipedThem = new Set(userDoc.data().swipedThem || []);
                 swipedThem.add(buddy_uid);
                 swipedThem = Array.from(swipedThem);
-                swipedThem = new Set(swipedThem);
-                transaction.update(userRef, { swipedThem: Array.from(swipedThem) });
+                transaction.update(userRef, { swipedThem: swipedThem });
     
                 // Add user to buddy's swipedMe set
                 let swipedMe = new Set(buddyDoc.data().swipedMe || []);
                 //console.log(swipedMe);
                 swipedMe.add(uid);
                 swipedMe = Array.from(swipedMe);
-                swipedMe = new Set(swipedMe);
-                transaction.update(buddyRef, { swipedMe: Array.from(swipedMe) });
+                transaction.update(buddyRef, { swipedMe: swipedMe });
             } 
             else {
                 return;
