@@ -220,7 +220,7 @@ app2.post('/createUser', async (req, res) => {
       res.status(500).send('Error counting users');
     }
   });
-/*
+
   // function for a user send message to a buddy
   app2.post('/sendMessage', async (req, res) => {
     const { token, buddy_email, message } = req.body;
@@ -231,7 +231,7 @@ app2.post('/createUser', async (req, res) => {
     } catch (error) {
       res.status(500).send('Error sending message');
     }
-  });*/
+  });
 
   // function for the swiping feature
   app2.post('/swipe', async (req, res) => {
