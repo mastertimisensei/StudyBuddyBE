@@ -78,6 +78,21 @@ async function getMessages(email, buddyEmail) {
     return null;
 }
 
+// get message based on chatId
+async function getMessagesByChatId(chatId) {
+    const messageRef = admin.firestore().collection('messages').doc(chatId);
+    const messageDoc = await messageRef.collection('messages').orderBy("time", "asc").get();
+    let messages = "[";
+    messageDoc.forEach(doc => {
+        const message = doc.data();
+        const time = message.time.toDate().toISOString().replace('T', ' ').substr(0, 19);
+        messages += `{ "time": "${time}", "message": "${message.message}", "sender": "${message.from}" },`;
+    });
+    messages = messages.slice(0, -1) + "]";
+    return messages;
+}
+
+
 /*
 function listenForNewMessages(chatId) {
     return new Promise((resolve, reject) => {
@@ -120,4 +135,4 @@ getMessages('alexanderjohnson@fakemaill.com','sophiagarcia@fakemaill.com').then(
 //test listenForNewMessages
 //listenForNewMessages('RcUBX7PPEBM1QFUdmsU9');
 //listenForNewMessages('ywFefzpndETusBjCa0n8');
-module.exports = { messageBuddy, getMessages };
+module.exports = { messageBuddy, getMessages, getMessagesByChatId };

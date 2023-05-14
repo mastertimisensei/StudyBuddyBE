@@ -5,7 +5,7 @@ const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
 const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList, checkFlag } = require('./backend_functions/utilities');
 const {swipeThem} = require('./backend_functions/match');
-const {messageBuddy, getMessages} = require('./backend_functions/messaging');
+const {messageBuddy, getMessages, getMessagesByChatId} = require('./backend_functions/messaging');
 
 
 app2.use(bodyParser.json());
@@ -300,7 +300,19 @@ app2.get('/getUserData/:uid', async (req, res) => {
     try {
       const email = (await verifyIdToken(token)).email;
       const messages = await getMessages(email, buddy_email);
-      console.log(messages);
+      //console.log(messages);
+      res.status(200).send(messages);
+    } catch (error) {
+      res.status(500).send('Error getting messages');
+    }
+  });
+
+  // function to get the messages
+  app2.post('/getMessages2', async (req, res) => {
+    const { chatId } = req.body;
+    try {
+      const messages = await getMessagesByChatId(chatId);
+      //console.log(messages);
       res.status(200).send(messages);
     } catch (error) {
       res.status(500).send('Error getting messages');
