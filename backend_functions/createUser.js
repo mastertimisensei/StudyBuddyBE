@@ -15,6 +15,12 @@ async function createUser(name,email, password, Location = "", set = null, flag 
           throw new Error('Password is too short');
         }
         //check if email is already in use
+        const user = await admin.auth().getUserByEmail(email);
+        if (user) {
+            console.log('Email is already in use');
+            throw new Error('Email is already in use');
+        }
+        //create user
       const userRecord = await admin.auth().createUser({
         email: email,
         password: password
