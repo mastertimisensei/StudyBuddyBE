@@ -284,13 +284,14 @@ const removeUserFromBuddyList = async (email, buddy_email) => {
 
 
 const checkFlag = async (email) => {
-    const userRef = admin.firestore().collection('users').doc(email);
-    const user = await userRef.get();
-    if (!user.exists) {
-        throw new Error("User document does not exist");
+    try {
+        const userRef = admin.firestore().collection('users').doc(email);
+        const user = await userRef.get();
+        const flag = user.data().flag;
+        return flag;
+    } catch (error) {
+        console.error('Error with checkFlag', error);
     }
-    const flag = user.data().flag;
-    return flag;
 };
 
 
