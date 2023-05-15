@@ -49,8 +49,8 @@ app2.post('/createUser', async (req, res) => {
   app2.post('/signIn', async (req, res) => {
     const { email, password } = req.body;
     const user = await signInWithEmail(email, password);
-    const flag = await checkFlag(email);
     try {
+      const flag = await checkFlag(email);
       res.status(200).json({token: user, flag: flag});
     } catch (error) {
       res.status(500).send(user);
