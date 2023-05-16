@@ -75,11 +75,12 @@ async function getMessages(email, buddyEmail) {
     }
 
     console.log("No messages");
-    return null;
+    return "[]";
 }
 
 // get message based on chatId
 async function getMessagesByChatId(chatId) {
+    //check if chatId in messages collection
     const messageRef = admin.firestore().collection('messages').doc(chatId);
     const messageDoc = await messageRef.collection('messages').orderBy("time", "asc").get();
     let messages = "[";

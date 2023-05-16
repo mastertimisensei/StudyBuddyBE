@@ -63,6 +63,21 @@ async function swipeThem(email, buddy_email, swipe) {
         }
 
         console.log('swipe complete');
+        // create a new message reference
+        console.log('creating message');
+        const messageRef = admin.firestore().collection('messages').doc();
+        await messageRef.set({
+            users: [email, buddyEmail]
+        });
+        let buddyMessagesMap = buddyDoc.data().messages || {};
+        let messagesMap = userDoc.data().messages || {};
+        messagesMap[buddy_email] = messageRef.id;
+        buddyMessagesMap[email] = messageRef.id;
+        await userRef.update({ messages: messagesMap });
+        await buddyRef.update({ messages: buddyMessagesMap });
+        console.log('message doc created');
+        // create a new message
+        
         return true;
     } catch (error) {
         console.error(error);
