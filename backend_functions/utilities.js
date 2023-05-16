@@ -217,6 +217,7 @@ const getAllUsersExceptCurrentUser = async (uid) => {
 
 
 // function for uploading a user's profile picture to the storage
+/*
 const uploadProfilePicture = async (uid, uri) => {
     const email = await getUserEmail(uid);
     const storage = getStorage();
@@ -246,6 +247,78 @@ const uploadProfilePicture = async (uid, uri) => {
     admin.firestore().collection('users').doc(email).update({
         photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
     })
+  };*/
+
+  /*
+  const uploadProfilePicture = async (uid, uri) => {
+    const email = await getUserEmail(uid);
+    const storage = getStorage();
+    const storageRef = storage.bucket();
+    const fileRef = storageRef.file(`profilePics/${uid}`);
+  
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', uri);
+    xhr.responseType = 'blob';
+  
+    xhr.onload = async () => {
+      if (xhr.status === 200) {
+        const fileBlob = xhr.response;
+  
+        const stream = fileRef.createWriteStream({
+          metadata: {
+            contentType: 'image/jpeg',
+          }
+        });
+  
+        stream.on('error', (err) => {
+          console.error(err);
+        });
+  
+        stream.on('finish', () => {
+          console.log(`File uploaded to ${fileRef.name}`);
+        });
+  
+        stream.end(fileBlob);
+  
+        // update the user's profile picture URL in Firestore
+        admin.firestore().collection('users').doc(email).update({
+          photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
+        });
+      } else {
+        console.error('Failed to fetch image data');
+      }
+    };
+  
+    xhr.send();
+  };*/
+  const uploadProfilePicture = async (uid, base64Data) => {
+    const email = await getUserEmail(uid);
+    const storage = getStorage();
+    const storageRef = storage.bucket();
+    const fileRef = storageRef.file(`profilePics/${uid}`);
+  
+    const fileBuffer = Buffer.from(base64Data, 'base64');
+  
+    const stream = fileRef.createWriteStream({
+      metadata: {
+        contentType: 'image/jpeg',
+      }
+    });
+  
+    stream.on('error', (err) => {
+      console.error(err);
+    });
+  
+    stream.on('finish', () => {
+      console.log(`File uploaded to ${fileRef.name}`);
+    });
+  
+    stream.end(fileBuffer);
+  
+    // update the user's profile picture URL in Firestore
+    admin.firestore().collection('users').doc(email).update({
+      photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
+    });
   };
 
 //uploadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82', 'download.jpeg');
