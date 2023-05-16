@@ -3,7 +3,8 @@ const app2 = express();
 const bodyParser = require('body-parser');
 const { createUser } = require('./backend_functions/createUser');
 const {signInWithEmail, signOutUser, verifyIdToken} = require('./backend_functions/signIn');
-const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture, deleteUser,removeUserFromBuddyList, checkFlag } = require('./backend_functions/utilities');
+const {checkUserLoggedIn, countUsers, getUserUid, updateUserPassword, updateUserEmail,getAllUsers, getAllUsersData, setUserData, getUserData, getAllUsersExceptCurrentUser, uploadProfilePicture, showProfilePicture,removeUserFromBuddyList, checkFlag } = require('./backend_functions/utilities');
+const {deleteUser} = require('./backend_functions/deleteUser');
 const {swipeThem} = require('./backend_functions/match');
 const {messageBuddy, getMessages, getMessagesByChatId} = require('./backend_functions/messaging');
 
@@ -58,27 +59,6 @@ app2.post('/createUser', async (req, res) => {
   });
 
 
-  /*
-  app2.post('/signIn', async (req, res) => {
-//     // Extract the token from the Authorization header
-//     const bearerToken = req.headers.authorization;
-//     if (!bearerToken || !bearerToken.startsWith('Bearer ')) {
-//       return res.status(401).send('Unauthorized');
-//     }
-//     const idToken = bearerToken.split('Bearer ')[1];
-
-//     // Verify the token
-//     const decodedToken = await verifyIdToken(idToken);
-
-    // Sign in process..
-    const { email, password} = req.body;
-    const user = await signInWithEmail(email, password);
-    try {
-      res.status(200).send(user);
-    } catch (error) {
-      res.status(500).send(user);
-    }
-  });*/
 
   //sign out a user
   app2.post('/signOut', async (req, res) => {
@@ -338,6 +318,18 @@ app2.get('/getUserData/:uid', async (req, res) => {
       res.status(200).send(image);
     } catch (error) {
       res.status(500).send('Error downloading profile picture');
+    }
+  });
+
+  // function to delete user profile
+  app2.post('/deleteProfile', async (req, res) => {
+    const { token } = req.body;
+    try {
+      const uid = (await verifyIdToken(token)).uid;
+      await deleteUser(uid);
+      res.status(200).send('Profile deleted successfully');
+    } catch (error) {
+      res.status(500).send('Error deleting profile');
     }
   });
 
