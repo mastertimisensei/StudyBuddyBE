@@ -83,6 +83,10 @@ async function getMessagesByChatId(chatId) {
     //check if chatId in messages collection
     const messageRef = admin.firestore().collection('messages').doc(chatId);
     const messageDoc = await messageRef.collection('messages').orderBy("time", "asc").get();
+    if (messageDoc.empty) {
+        console.log("No messages");
+        return "[]";
+    }
     let messages = "[";
     messageDoc.forEach(doc => {
         const message = doc.data();
