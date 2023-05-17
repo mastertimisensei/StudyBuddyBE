@@ -306,7 +306,7 @@ app2.get('/getUserData/:uid', async (req, res) => {
       await uploadProfilePicture(uid, image);
       res.status(200).send('Profile picture uploaded successfully');
     } catch (error) {
-      res.status(500).send('Error uploading profile picture');
+      res.status(500).json({ message: 'Error uploading profile picture', error: error.message });
     }
   });
 
