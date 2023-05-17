@@ -339,12 +339,15 @@ const uploadProfilePicture = async (uid, imageUrl) => {
     }
   });
 
+  return new Promise((resolve, reject) => {
   stream.on('error', (err) => {
     console.error(err);
+    reject(err);
   });
 
   stream.on('finish', () => {
     console.log(`File uploaded to ${fileRef.name}`);
+      resolve();
   });
 
   stream.end(fileBuffer);
