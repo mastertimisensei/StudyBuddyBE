@@ -395,9 +395,7 @@ const uploadProfilePicture = async (uid, imageUrl) => {
         .collection("users")
         .doc(email)
         .update({
-          photoUrl: `https://firebasestorage.googleapis.com/v0/b/${
-            storageRef.name
-          }/o/${encodeURIComponent(fileRef.name)}?alt=media`,
+          photoUrl: showProfilePicture(uid),
         });
       stream.end(fileBuffer);
     });
