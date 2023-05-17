@@ -386,11 +386,8 @@ const uploadProfilePicture = async (uid, imageUrl) => {
           expires: "03-09-2491",
         });
         // Send the URL as a response
-        res.status(200).json({ url: urls[0] });
-        resolve();
+        resolve(urls[0]);
       });
-
-      stream.end(fileBuffer);
 
       // Update the user's profile picture URL in Firestore
       admin
@@ -402,6 +399,7 @@ const uploadProfilePicture = async (uid, imageUrl) => {
             storageRef.name
           }/o/${encodeURIComponent(fileRef.name)}?alt=media`,
         });
+      stream.end(fileBuffer);
     });
   } catch (error) {
     console.error("Error in uploadProfilePicture: ", error);
