@@ -142,7 +142,7 @@ app2.post("/setUserData", async (req, res) => {
   try {
     const uid = (await verifyIdToken(token)).uid;
     console.log(uid);
-    try {
+
       await setUserData(
         uid,
         name,
@@ -156,11 +156,9 @@ app2.post("/setUserData", async (req, res) => {
         photoUrl,
         flag
       );
-    } catch (error) {
-      res.status(500).send("Error setting user data");
-    }
     res.status(200).send("User data updated successfully");
   } catch (error) {
+    console.error("Error updating user data", error);
     res.status(500).send("Error updating user data");
   }
 });
