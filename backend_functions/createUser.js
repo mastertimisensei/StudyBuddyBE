@@ -47,9 +47,4 @@ async function createUser(name,email, password, Location = "", set = null, flag 
     }
   }
 
-
-//createUser('Joseph Akra','jobavaw504@syinxun.com', 'password');
-//createUser('John Snow','johnsnow@gmail.com', 'password');
-//createUser('Josep Stalink','jostallinbigsick@sicleadmin.com', 'password');
-//createUser('Josep Waterson','jojostalinbigsick@sicleadmin2.com', 'password');
 module.exports = {createUser};
