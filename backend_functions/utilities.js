@@ -1,11 +1,14 @@
-const { app, admin } = require('../firebaseConfig.js');
-const { deleteUser, getUserEmail } = require('./deleteUser.js');
-const { getAuth, signInWithEmailAndPassword, onAuthStateChanged } = require('firebase/auth');
-const { getStorage } = require('firebase-admin/storage');
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
-
+const { app, admin } = require("../firebaseConfig.js");
+const { deleteUser, getUserEmail } = require("./deleteUser.js");
+const {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} = require("firebase/auth");
+const { getStorage } = require("firebase-admin/storage");
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
 
 // CHECK IF USER IS LOGGED IN
 async function checkUserLoggedIn() {
@@ -13,7 +16,6 @@ async function checkUserLoggedIn() {
   const auth = getAuth();
   // Check if user is logged in
   onAuthStateChanged(auth, (user) => {
-
     if (user) {
       // User is signed in
       console.log("User is signed in");
@@ -22,24 +24,24 @@ async function checkUserLoggedIn() {
       // User is signed out
       console.log("User is signed out");
     }
-  }
-  );
+  });
 }
 //checkUserLoggedIn();
 
 // function to check if a particuluar user uid is logged in
 
-
 // lets count the number of users
 const countUsers = () => {
   return new Promise((resolve, reject) => {
-    admin.auth().listUsers()
+    admin
+      .auth()
+      .listUsers()
       .then((listUsersResult) => {
         //console.log('Total users:', listUsersResult.users.length);
         resolve(listUsersResult.users.length);
       })
       .catch((error) => {
-        console.log('Error listing users:', error);
+        console.log("Error listing users:", error);
         reject(error);
       });
   });
@@ -50,27 +52,28 @@ async function getUserUid(email) {
     const userRecord = await admin.auth().getUserByEmail(email);
     return userRecord.uid;
   } catch (error) {
-    console.log('Error fetching user data:', error);
+    console.log("Error fetching user data:", error);
   }
 }
-
 
 // Function for updating a user's password
 const updateUserPassword = (uid, password) => {
   return new Promise((resolve, reject) => {
-    admin.auth().updateUser(uid, {
-      password: password,
-    })
+    admin
+      .auth()
+      .updateUser(uid, {
+        password: password,
+      })
       .then(() => {
-        console.log('Successfully updated user');
+        console.log("Successfully updated user");
         resolve();
       })
       .catch((error) => {
-        console.log('Error updating user:', error);
+        console.log("Error updating user:", error);
         reject(error);
       });
   });
-}
+};
 
 // Function for updating a user's email
 const updateUserEmail = async (uid, emil) => {
@@ -78,24 +81,30 @@ const updateUserEmail = async (uid, emil) => {
     //update the email in the firestore
     const email = await getUserEmail(uid);
     console.log(email);
-    admin.auth().getUserByEmail(email)
-    const userRef = admin.firestore().collection('users').doc(email);
-    admin.firestore().collection('users').doc(email).update({
-      email: emil
-    })
-      .then(() => {
-        console.log('Successfully updated user email in firestore');
-        resolve();
+    admin.auth().getUserByEmail(email);
+    const userRef = admin.firestore().collection("users").doc(email);
+    admin
+      .firestore()
+      .collection("users")
+      .doc(email)
+      .update({
+        email: emil,
       })
-    admin.auth().updateUser(uid, {
-      email: emil,
-    })
       .then(() => {
-        console.log('Successfully updated user');
+        console.log("Successfully updated user email in firestore");
+        resolve();
+      });
+    admin
+      .auth()
+      .updateUser(uid, {
+        email: emil,
+      })
+      .then(() => {
+        console.log("Successfully updated user");
         resolve();
       })
       .catch((error) => {
-        console.log('Error updating user:', error);
+        console.log("Error updating user:", error);
         reject(error);
       });
   });
@@ -106,13 +115,15 @@ const updateUserEmail = async (uid, emil) => {
 // Function for return all the users in the json format
 const getAllUsers = () => {
   return new Promise((resolve, reject) => {
-    admin.auth().listUsers()
+    admin
+      .auth()
+      .listUsers()
       .then((listUsersResult) => {
         //console.log('Total users:', listUsersResult.users.length);
         resolve(listUsersResult.users);
       })
       .catch((error) => {
-        console.log('Error listing users:', error);
+        console.log("Error listing users:", error);
         reject(error);
       });
   });
@@ -125,7 +136,11 @@ const getAllUsersData = async () => {
   // loop through all the users
   for (let i = 0; i < users.length; i++) {
     // get the user data from firestore
-    const user = await admin.firestore().collection('users').doc(users[i].email).get();
+    const user = await admin
+      .firestore()
+      .collection("users")
+      .doc(users[i].email)
+      .get();
     // push the user data to the usersData array
     usersData.push(user.data());
   }
@@ -138,7 +153,6 @@ const getAllUsersData = async () => {
 };
 //getAllUsersData();
 
-
 // function to delete all the users in the database and auth
 const deleteAllUsers = async () => {
   const users = await getAllUsers();
@@ -149,38 +163,54 @@ const deleteAllUsers = async () => {
 
 //deleteAllUsers();
 // fill a users data in firestore
-const setUserData = async (uid, name, age, Language, Major, InterestedSubjects, Location, University, bio, photoPath, flag = true) => {
+const setUserData = async (
+  uid,
+  name,
+  age,
+  Language,
+  Major,
+  InterestedSubjects,
+  Location,
+  University,
+  bio,
+  photoPath,
+  flag = true
+) => {
   const email = await getUserEmail(uid);
   console.log(email);
-  admin.auth().getUserByEmail(email)
-  const userRef = admin.firestore().collection('users').doc(email);
+  admin.auth().getUserByEmail(email);
+  const userRef = admin.firestore().collection("users").doc(email);
   await uploadProfilePicture(uid, photoPath);
   //var photoLink = await getProfilePicture(uid);
   photoLink = await showProfilePicture(uid);
-  admin.firestore().collection('users').doc(email).update({
-    name: name,
-    age: age,
-    Language: Language,
-    Major: Major,
-    InterestedSubjects: InterestedSubjects,
-    Location: Location,
-    University: University,
-    bio: bio,
-    photoUrl: photoLink,
-    flag: flag
-  })
-    .then(() => {
-      console.log('Successfully updated user email in firestore');
-
+  admin
+    .firestore()
+    .collection("users")
+    .doc(email)
+    .update({
+      name: name,
+      age: age,
+      Language: Language,
+      Major: Major,
+      InterestedSubjects: InterestedSubjects,
+      Location: Location,
+      University: University,
+      bio: bio,
+      photoUrl: photoLink,
+      flag: flag,
     })
-}
+    .then(() => {
+      console.log("Successfully updated user email in firestore");
+    });
+};
 
 // get user data from firestore
 const getUserData = async (uid) => {
   const email = await getUserEmail(uid);
-  const userRef = admin.firestore().collection('users').doc(email);
+  const userRef = admin.firestore().collection("users").doc(email);
   return new Promise((resolve, reject) => {
-    userRef.get()
+    userRef
+      .get()
       .then((doc) => {
         if (doc.exists) {
           const data = JSON.stringify(doc.data());
@@ -195,8 +225,7 @@ const getUserData = async (uid) => {
         reject(error);
       });
   });
-}
-
+};
 
 // function to get all the users except the current user, the user's matches and the people who the user has already swiped
 const getAllUsersExceptCurrentUser = async (uid) => {
@@ -205,7 +234,11 @@ const getAllUsersExceptCurrentUser = async (uid) => {
   // loop through all the users
   for (let i = 0; i < users.length; i++) {
     // if the user is not the current user, the user's matches and the people who the user has already swiped
-    if (users[i].uid !== uid && !users[i].buddies.includes(uid) && !users[i].swipedMe.includes(uid)) {
+    if (
+      users[i].uid !== uid &&
+      !users[i].buddies.includes(uid) &&
+      !users[i].swipedMe.includes(uid)
+    ) {
       // push the user data to the usersData array
       usersData.push(users[i]);
     }
@@ -214,8 +247,6 @@ const getAllUsersExceptCurrentUser = async (uid) => {
   const usersDataJson = JSON.stringify(usersData);
   return usersDataJson;
 };
-
-
 
 // function for uploading a user's profile picture to the storage
 /*
@@ -330,35 +361,48 @@ const uploadProfilePicture = async (uid, imageUrl) => {
     const fileRef = storageRef.file(`profilePics/${uid}`);
 
     // Download the image from Cloudinary
-    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
 
     // Create a buffer from the downloaded image
-    const fileBuffer = Buffer.from(response.data, 'binary');
+    const fileBuffer = Buffer.from(response.data, "binary");
 
     const stream = fileRef.createWriteStream({
       metadata: {
-        contentType: 'image/jpeg',
-      }
+        contentType: "image/jpeg",
+      },
     });
 
     return new Promise((resolve, reject) => {
-      stream.on('error', (err) => {
+      stream.on("error", (err) => {
         console.error(err);
         reject(err);
       });
 
-      stream.on('finish', () => {
+      stream.on("finish", async () => {
         console.log(`File uploaded to ${fileRef.name}`);
+        // Get the URL of the uploaded image
+        const urls = await fileRef.getSignedUrl({
+          action: "read",
+          expires: "03-09-2491",
+        });
+        // Send the URL as a response
+        res.status(200).json({ url: urls[0] });
         resolve();
       });
 
       stream.end(fileBuffer);
 
       // Update the user's profile picture URL in Firestore
-      admin.firestore().collection('users').doc(email).update({
-        photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
-      });
-    })
+      admin
+        .firestore()
+        .collection("users")
+        .doc(email)
+        .update({
+          photoUrl: `https://firebasestorage.googleapis.com/v0/b/${
+            storageRef.name
+          }/o/${encodeURIComponent(fileRef.name)}?alt=media`,
+        });
+    });
   } catch (error) {
     console.error("Error in uploadProfilePicture: ", error);
     throw error;
@@ -374,8 +418,8 @@ const showProfilePicture = async (uid) => {
   const storageRef = storage.bucket();
   const fileRef = storageRef.file(`profilePics/${uid}`);
   const downloadUrl = await fileRef.getSignedUrl({
-    action: 'read',
-    expires: '03-09-2491'
+    action: "read",
+    expires: "03-09-2491",
   });
   //console.log(downloadUrl);
   return downloadUrl;
@@ -383,8 +427,8 @@ const showProfilePicture = async (uid) => {
 
 // function to remove user from buddy list
 const removeUserFromBuddyList = async (email, buddy_email) => {
-  const userRef = admin.firestore().collection('users').doc(email);
-  const buddyRef = admin.firestore().collection('users').doc(buddy_email);
+  const userRef = admin.firestore().collection("users").doc(email);
+  const buddyRef = admin.firestore().collection("users").doc(buddy_email);
   //get the buddies uid
   const buddy_uid = await getUserUid(buddy_email);
   //get the user's uid
@@ -395,24 +439,20 @@ const removeUserFromBuddyList = async (email, buddy_email) => {
   });
   // remove the user from the buddy's buddy list
   await buddyRef.update({
-    buddies: admin.firestore.FieldValue.arrayRemove(user_uid)
+    buddies: admin.firestore.FieldValue.arrayRemove(user_uid),
   });
 };
 
-
 const checkFlag = async (email) => {
   try {
-    const userRef = admin.firestore().collection('users').doc(email);
+    const userRef = admin.firestore().collection("users").doc(email);
     const user = await userRef.get();
     const flag = user.data().flag;
     return flag;
   } catch (error) {
-    console.error('Error with checkFlag', error);
+    console.error("Error with checkFlag", error);
   }
 };
-
-
-
 
 module.exports = {
   checkUserLoggedIn,
@@ -429,6 +469,5 @@ module.exports = {
   uploadProfilePicture,
   showProfilePicture,
   removeUserFromBuddyList,
-  checkFlag
+  checkFlag,
 };
-
