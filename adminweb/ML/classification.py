@@ -39,6 +39,9 @@ def get_cosine_similarity(bio1, bio2):
         mag1 += word_freq1.get(word, 0) ** 2
         mag2 += word_freq2.get(word, 0) ** 2
     
-    similarity = dot_product / (math.sqrt(mag1) * math.sqrt(mag2))
+    try:
+        similarity = dot_product / (math.sqrt(mag1) * math.sqrt(mag2))
+    except ZeroDivisionError:
+        similarity = 0.0
     
     return similarity
