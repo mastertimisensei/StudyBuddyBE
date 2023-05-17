@@ -82,6 +82,7 @@ async function getMessages(email, buddyEmail) {
 async function getMessagesByChatId(chatId) {
     //check if chatId in messages collection
     const messageRef = admin.firestore().collection('messages').doc(chatId);
+    // check if messageRef exists
     const messageDoc = await messageRef.collection('messages').orderBy("time", "asc").get();
     if (messageDoc.empty) {
         console.log("No messages");
@@ -98,46 +99,5 @@ async function getMessagesByChatId(chatId) {
 }
 
 
-/*
-function listenForNewMessages(chatId) {
-    return new Promise((resolve, reject) => {
-      const messageRef = admin.firestore().collection('messages').doc(chatId).collection('messages');
-      const unsubscribe = messageRef.orderBy("time").onSnapshot((querySnapshot) => {
-        querySnapshot.docChanges().forEach((change) => {
-          if (change.type === "added") {
-            const message = change.doc.data();
-            resolve({
-              timestamp: message.time.toDate(),
-              text: message.text,
-              sender: message.sender,
-              // Add more fields as needed
-            });
-          }
-        });
-      }
-      );
-      //Messagelisteners[chatId] = unsubscribe;
-    });
-  }
 
-// stop listening for new messages
-/*
-function stopListeningForNewMessages(chatId) {
-    if (Messagelisteners[chatId]) {
-        Messagelisteners[chatId]();
-        delete Messagelisteners[chatId];
-    }
-}*/
-
-//test getMessages
-
-/*
-getMessages('alexanderjohnson@fakemaill.com','sophiagarcia@fakemaill.com').then((data) => {
-    console.log(data);
-}
-);*/
-
-//test listenForNewMessages
-//listenForNewMessages('RcUBX7PPEBM1QFUdmsU9');
-//listenForNewMessages('ywFefzpndETusBjCa0n8');
 module.exports = { messageBuddy, getMessages, getMessagesByChatId };
