@@ -143,19 +143,19 @@ app2.post("/setUserData", async (req, res) => {
     const uid = (await verifyIdToken(token)).uid;
     console.log(uid);
 
-    await setUserData(
-      uid,
-      name,
-      age,
-      Language,
-      Major,
-      InterestedSubjects,
-      Location,
-      University,
-      bio,
-      photoUrl === 'https://firebasestorage.googleapis.com/v0/b/study-buddy-backend-de08a.appspot.com/o/profilePics%2Fprofile_picture_placeholder.jpg?alt=media&token=df5dc063-39f1-4950-9264-5d542a18bfb3' ? null : photoUrl,
-      flag
-    );
+      await setUserData(
+        uid,
+        name,
+        age,
+        Language,
+        Major,
+        InterestedSubjects,
+        Location,
+        University,
+        bio,
+        photoUrl,
+        flag
+      );
     res.status(200).send("User data updated successfully");
   } catch (error) {
     console.error("Error updating user data", error);
