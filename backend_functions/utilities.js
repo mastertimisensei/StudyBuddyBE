@@ -291,7 +291,7 @@ const uploadProfilePicture = async (uid, uri) => {
   
     xhr.send();
   };*/
-  const uploadProfilePicture = async (uid, base64Data) => {
+ /* const uploadProfilePicture = async (uid, base64Data) => {
     const email = await getUserEmail(uid);
     const storage = getStorage();
     const storageRef = storage.bucket();
@@ -319,7 +319,41 @@ const uploadProfilePicture = async (uid, uri) => {
     admin.firestore().collection('users').doc(email).update({
       photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
     });
-  };
+  };*/
+
+const uploadProfilePicture = async (uid, imageUrl) => {
+  const email = await getUserEmail(uid);
+  const storage = getStorage();
+  const storageRef = storage.bucket();
+  const fileRef = storageRef.file(`profilePics/${uid}`);
+
+  // Download the image from Cloudinary
+  const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+
+  // Create a buffer from the downloaded image
+  const fileBuffer = Buffer.from(response.data, 'binary');
+
+  const stream = fileRef.createWriteStream({
+    metadata: {
+      contentType: 'image/jpeg',
+    }
+  });
+
+  stream.on('error', (err) => {
+    console.error(err);
+  });
+
+  stream.on('finish', () => {
+    console.log(`File uploaded to ${fileRef.name}`);
+  });
+
+  stream.end(fileBuffer);
+
+  // Update the user's profile picture URL in Firestore
+  admin.firestore().collection('users').doc(email).update({
+    photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
+  });
+};
 
 //uploadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82', 'download.jpeg');
 
