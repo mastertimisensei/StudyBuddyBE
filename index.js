@@ -2,6 +2,7 @@ const {app, admin} = require('./firebaseConfig.js');
 const {countUsers, uploadProfilePicture} = require('./backend_functions/utilities.js');
 const {messageBuddy, getMessages} = require('./backend_functions/messaging.js');
 const {deleteAllUsers} = require('./backend_functions/utilities.js');
+const {swipeThem} = require('./backend_functions/match.js');
 
 //lets create a user
 //createUser('John Snow','johnsnow@gmail.com', 'password');
@@ -41,8 +42,5 @@ sleep(5000).then(() => {
 
 
 //messageBuddy('abigailjones@fakemaill.com','jobavaw504syinxuncom', 'text message');
-getMessages('seconduser@gmail.com','firstuser@gmail.com').then((messages) => {
-    console.log(messages);
-}
-);
+swipeThem('newuser@gmail.com','firstuser@gmail.com',true);
 
