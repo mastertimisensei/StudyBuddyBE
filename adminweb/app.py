@@ -51,6 +51,7 @@ def login():
 def dashboard():
     #check if the user is logged in
     if user != None:
+        print(user)
         count_user_url = 'https://studybuddy-backend.onrender.com/countUsers' #or 'localhost:3000/countUsers'
         get_user_url = 'https://studybuddy-backend.onrender.com/getAllUsersData' #or 'localhost:3000/getUsers'
         # get data from url
