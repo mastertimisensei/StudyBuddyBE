@@ -11,7 +11,7 @@ app = Flask(__name__)
 login_manager = LoginManager(app)
 
 # A dictionary to store the user credentials
-user = ""
+user = None
 @login_manager.user_loader
 def load_user(user_id):
     # Load the user from your database
