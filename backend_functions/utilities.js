@@ -322,7 +322,8 @@ const uploadProfilePicture = async (uid, uri) => {
   };*/
 
 const uploadProfilePicture = async (uid, imageUrl) => {
-  const email = await getUserEmail(uid);
+  try {
+      const email = await getUserEmail(uid);
   const storage = getStorage();
   const storageRef = storage.bucket();
   const fileRef = storageRef.file(`profilePics/${uid}`);
@@ -356,6 +357,9 @@ const uploadProfilePicture = async (uid, imageUrl) => {
   admin.firestore().collection('users').doc(email).update({
     photoUrl: `https://firebasestorage.googleapis.com/v0/b/${storageRef.name}/o/${encodeURIComponent(fileRef.name)}?alt=media`
   });
+  } catch (err) {
+  console.log("Error from server: ", err.response.data.error);
+}
 };
 
 //uploadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82', 'download.jpeg');
