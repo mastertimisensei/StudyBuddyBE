@@ -11,7 +11,7 @@ app = Flask(__name__)
 login_manager = LoginManager(app)
 
 # A dictionary to store the user credentials
-
+user = ""
 @login_manager.user_loader
 def load_user(user_id):
     # Load the user from your database
@@ -26,7 +26,7 @@ def index():
 def login():
     email = request.form['email']
     password = request.form['password']
-    loginurl = 'https://studybuddy-backend.onrender.com/signIn' #or 'https://studybuddy-backend.onrender.com/signIn'
+    loginurl = 'https://studybuddy-backend.onrender.com/signIn'
     # post data to url
     login = requests.post(loginurl, data={'email': email, 'password': password, 'flag':True})
     # check if login is successful
@@ -35,6 +35,8 @@ def login():
             url = 'https://studybuddy-backend.onrender.com/getUserData'
             post = requests.post(url, data={'token': login.json()['token']})
             post = post.json()
+            global user
+            user = email
             if (True):
                 print('Login successful!')
                 return redirect(url_for('dashboard'))
@@ -48,7 +50,7 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     #check if the user is logged in
-    if not current_user.is_authenticated:
+    if user != None:
         count_user_url = 'https://studybuddy-backend.onrender.com/countUsers' #or 'localhost:3000/countUsers'
         get_user_url = 'https://studybuddy-backend.onrender.com/getAllUsersData' #or 'localhost:3000/getUsers'
         # get data from url
@@ -67,7 +69,7 @@ def dashboard():
 @app.route('/getUserdata/<string:uid>')
 def getUserdata(uid):
     #check if the user is logged in
-    if not current_user.is_authenticated:
+    if user != None:
         get_user_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
         post = requests.post(get_user_url, data={'uid': uid})
 
