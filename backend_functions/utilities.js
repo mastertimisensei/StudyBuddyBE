@@ -180,9 +180,11 @@ const setUserData = async (
   console.log(email);
   admin.auth().getUserByEmail(email);
   const userRef = admin.firestore().collection("users").doc(email);
-  await uploadProfilePicture(uid, photoPath);
-  //var photoLink = await getProfilePicture(uid);
-  photoLink = await showProfilePicture(uid);
+  let photoLink = "";
+  if (photoPath !== null) {
+    await uploadProfilePicture(uid, photoPath);
+    photoLink = await showProfilePicture(uid);
+  }
   admin
     .firestore()
     .collection("users")
