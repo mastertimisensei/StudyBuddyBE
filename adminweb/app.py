@@ -130,7 +130,12 @@ def show_recommendation_score():
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
     
-
+#log out the user
+@app.route('/logout')
+def logout():
+    global user
+    user = None
+    return redirect(url_for('login'))
 
 
 
