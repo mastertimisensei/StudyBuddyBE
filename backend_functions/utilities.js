@@ -389,14 +389,6 @@ const uploadProfilePicture = async (uid, imageUrl) => {
         resolve(urls[0]);
       });
 
-      // Update the user's profile picture URL in Firestore
-      admin
-        .firestore()
-        .collection("users")
-        .doc(email)
-        .update({
-          photoUrl: showProfilePicture(uid),
-        });
       stream.end(fileBuffer);
     });
   } catch (error) {
