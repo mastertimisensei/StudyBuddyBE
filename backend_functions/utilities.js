@@ -400,6 +400,7 @@ const uploadProfilePicture = async (uid, imageUrl) => {
 //uploadProfilePicture('wsMwmGOMRGUh4vWtAaMQbjrW8w82', 'download.jpeg');
 
 //function to show the profile picture
+/*
 const showProfilePicture = async (uid) => {
   const email = await getUserEmail(uid);
   const storage = getStorage();
@@ -411,7 +412,24 @@ const showProfilePicture = async (uid) => {
   });
   //console.log(downloadUrl);
   return downloadUrl;
+};*/
+const showProfilePicture = async (uid) => {
+  try {
+    const email = await getUserEmail(uid);
+    const storage = getStorage();
+    const storageRef = storage.bucket();
+    const fileRef = storageRef.file(`profilePics/${uid}`);
+    const downloadUrl = await fileRef.getSignedUrl({
+      action: "read",
+      expires: "03-09-2491",
+    });
+    return downloadUrl;
+  } catch (error) {
+    console.error("Error fetching profile picture:", error);
+    return "";
+  }
 };
+
 
 // function to remove user from buddy list
 const removeUserFromBuddyList = async (email, buddy_email) => {
