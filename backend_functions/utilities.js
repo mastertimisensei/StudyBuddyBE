@@ -447,6 +447,21 @@ const removeUserFromBuddyList = async (email, buddy_email) => {
   await buddyRef.update({
     buddies: admin.firestore.FieldValue.arrayRemove(user_uid),
   });
+  // remove the user from the buddies messages
+const buddyDoc = await buddyRef.get();
+const messages = buddyDoc.data().messages;
+
+// Remove the user_uid from the messages map
+delete messages[user_uid];
+
+// Update the buddyRef document with the modified messages map
+await buddyRef.update({ messages });
+
+// Repeat the same steps for userRef
+const userDoc = await userRef.get();
+const messages2 = userDoc.data().messages;
+delete messages2[buddy_uid];
+await userRef.update({ messages: messages2 });
 };
 
 const checkFlag = async (email) => {
