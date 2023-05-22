@@ -73,10 +73,10 @@ async function swipeThem(email, buddy_email, swipe) {
         console.log('message doc created');
         // create add a time stamp to the message
         //const timeStamp = admin.firestore.FieldValue.serverTimestamp();
-        return true;
         }
 
         console.log('swipe complete');
+        return true;
         // create a new message reference
     } catch (error) {
         console.error(error);
