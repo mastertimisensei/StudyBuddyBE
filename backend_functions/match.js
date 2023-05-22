@@ -59,12 +59,7 @@ async function swipeThem(email, buddy_email, swipe) {
             // Update buddy's buddies
             buddybuddies.add(uid);
             await buddyRef.update({ buddies: Array.from(buddybuddies) });
-            
-        }
-
-        console.log('swipe complete');
-        // create a new message reference
-        console.log('creating message');
+            console.log('creating message');
         const messageRef = admin.firestore().collection('messages').doc();
         await messageRef.set({
             users: [email, buddy_email]
@@ -79,6 +74,10 @@ async function swipeThem(email, buddy_email, swipe) {
         // create add a time stamp to the message
         //const timeStamp = admin.firestore.FieldValue.serverTimestamp();
         return true;
+        }
+
+        console.log('swipe complete');
+        // create a new message reference
     } catch (error) {
         console.error(error);
         return false;
