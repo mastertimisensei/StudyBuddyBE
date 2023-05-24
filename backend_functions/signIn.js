@@ -16,7 +16,8 @@ async function signInWithEmail(email, password) {
   } catch (error) {
     console.error('Error signing in with email and password', error);
     // throw the error
-    throw new Error("Invalid email or password");
+    throw (error);
+    // throw new Error("Invalid email or password");
   }
 }
 
