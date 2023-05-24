@@ -76,7 +76,9 @@ app2.post("/signIn", async (req, res) => {
     const flag = await checkFlag(email);
     res.status(200).json({ token: user, flag: flag });
   } catch (error) {
-    res.status(500).send(user);
+    // if error is with user 
+    res.status(401).json({error: 'Invalid email or password'})
+    //res.status(500).send(user);
   }
 });
 
