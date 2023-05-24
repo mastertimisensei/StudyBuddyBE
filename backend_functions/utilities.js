@@ -174,7 +174,7 @@ const setUserData = async (
   University,
   bio,
   photoPath,
-  flag = true
+  flag,
 ) => {
   const email = await getUserEmail(uid);
   console.log(email);
