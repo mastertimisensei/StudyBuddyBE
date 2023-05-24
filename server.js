@@ -76,11 +76,9 @@ app2.post("/signIn", async (req, res) => {
     const flag = await checkFlag(email);
     res.status(200).json({ token: user, flag: flag });
   } catch (error) {
-    if (error.message === 'Invalid email or password') {
-      res.status(401).json({ error: 'Invalid email or password' });
-    } else {
-      res.status(500).json({ error: 'An error occurred' });
-    }
+    console.error('Error in /signIn: ', error);
+    res.status(401).json({ error: 'Invalid email or password' });
+    res.status(500).json({ error: 'An error occurred' });
   }
 });
 
@@ -147,19 +145,19 @@ app2.post("/setUserData", async (req, res) => {
     const uid = (await verifyIdToken(token)).uid;
     console.log(uid);
 
-      await setUserData(
-        uid,
-        name,
-        age,
-        Language,
-        Major,
-        InterestedSubjects,
-        Location,
-        University,
-        bio,
-        photoUrl,
-        flag
-      );
+    await setUserData(
+      uid,
+      name,
+      age,
+      Language,
+      Major,
+      InterestedSubjects,
+      Location,
+      University,
+      bio,
+      photoUrl,
+      flag
+    );
     res.status(200).send("User data updated successfully");
   } catch (error) {
     console.error("Error updating user data", error);
