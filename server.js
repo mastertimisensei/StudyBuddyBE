@@ -77,7 +77,7 @@ app2.post("/signIn", async (req, res) => {
     res.status(200).json({ token: user, flag: flag });
   } catch (error) {
     console.error('Error in /signIn: ', error);
-    if (error.message === 'Error signing in with email and password') {
+    if (error.code === 'auth/invalid-email' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
       res.status(401).json({ error: 'Invalid email or password' });
     } else {
       // If it's some other kind of error, send a 500 response
