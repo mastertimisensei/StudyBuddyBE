@@ -71,14 +71,16 @@ app2.get("/listUsers", async (req, res) => {
 //sign in a user
 app2.post("/signIn", async (req, res) => {
   const { email, password } = req.body;
-  const user = await signInWithEmail(email, password);
   try {
+    const user = await signInWithEmail(email, password);
     const flag = await checkFlag(email);
     res.status(200).json({ token: user, flag: flag });
   } catch (error) {
-    // if error is with user 
-    res.status(401).json({error: 'Invalid email or password'})
-    //res.status(500).send(user);
+    if (error.message === 'Invalid email or password') {
+      res.status(401).json({ error: 'Invalid email or password' });
+    } else {
+      res.status(500).json({ error: 'An error occurred' });
+    }
   }
 });
 
