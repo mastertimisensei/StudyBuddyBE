@@ -1,6 +1,7 @@
 // Function for deleting a user
 const {app, admin} = require('../firebaseConfig.js');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+const {removeUserFromBuddyList} = require('../utilities');
 
 const auth = getAuth();
 
@@ -20,6 +21,13 @@ const deleteUser = async (uid) => {
         console.log(email);
         admin.auth().getUserByEmail(email)
         const userRef = admin.firestore().collection('users').doc(email);
+        //get user's buddy list
+        const buddyList = await userRef.get().buddies;
+        //remove user from all buddy lists
+        for (const buddy of buddyList) {
+            buddy_email = await getUserEmail(buddy);
+            removeUserFromBuddyList(buddy_email, email);
+        }
         userRef.delete().then(() => {
             console.log('User data deleted successfully');
         }).catch((error) => {
