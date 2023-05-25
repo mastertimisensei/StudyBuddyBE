@@ -5,7 +5,7 @@ const {getAllUsersExceptCurrentUser, removeUserFromBuddyList} = require('./backe
 const {swipeThem} = require('./backend_functions/match.js');
 const {deleteUser} = require('./backend_functions/deleteUser.js');
 
-deleteUser("Y74nzIwAr1ZHHiBoyHiJycesC4W2");
+
 
 //lets create a user
 //createUser('John Snow','johnsnow@gmail.com', 'password');
