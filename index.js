@@ -1,12 +1,11 @@
 const {app, admin} = require('./firebaseConfig.js');
 const {countUsers, uploadProfilePicture} = require('./backend_functions/utilities.js');
 const {messageBuddy, getMessages} = require('./backend_functions/messaging.js');
-const {getAllUsersExceptCurrentUser} = require('./backend_functions/utilities.js');
+const {getAllUsersExceptCurrentUser, removeUserFromBuddyList} = require('./backend_functions/utilities.js');
 const {swipeThem} = require('./backend_functions/match.js');
+const {deleteUser} = require('./backend_functions/deleteUser.js');
 
-getAllUsersExceptCurrentUser('p5HdzdiUhAfXXtaTbgvI92Rx5Tp1').then((users) => {
-    console.log(users);
-});
+deleteUser("Y74nzIwAr1ZHHiBoyHiJycesC4W2");
 
 //lets create a user
 //createUser('John Snow','johnsnow@gmail.com', 'password');
