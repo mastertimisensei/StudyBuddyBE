@@ -269,8 +269,8 @@ app2.post("/swipe", async (req, res) => {
       // swipe is a boolean value with true as its default
       res.status(200).send({ message: "Swipe sent successfully", isMatch: result.isMatch });
     } else {
-      res.status(500).send("Error swiping");
-      console.log(error);
+      // res.status(500).send("Error swiping");
+      console.log('nooooo');
     }
   } catch (error) {
     res.status(500).send("Error swiping");

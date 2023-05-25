@@ -81,7 +81,7 @@ async function swipeThem(email, buddy_email, swipe) {
         // create a new message reference
     } catch (error) {
         console.error(error);
-        return false;
+        return { success: false, isMatch: hasMatch };
     }
 }
 
