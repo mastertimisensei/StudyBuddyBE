@@ -38,7 +38,8 @@ async function swipeThem(email, buddy_email, swipe) {
             swipedMe = new Set(swipedMe);
             await buddyRef.update({ swipedMe: Array.from(swipedMe) });
         } else {
-            return;
+            // return;
+            return { success: true, isMatch: false };
         }
 
         // Check for a match
@@ -81,7 +82,8 @@ async function swipeThem(email, buddy_email, swipe) {
         // create a new message reference
     } catch (error) {
         console.error(error);
-        return { success: false, isMatch: hasMatch };
+        // return { success: false, isMatch: hasMatch };
+        return false;
     }
 }
 
