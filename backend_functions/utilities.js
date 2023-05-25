@@ -475,6 +475,33 @@ const checkFlag = async (email) => {
   }
 };
 
+const deleteUserInfo = async (uid) => {
+  try {
+    const email = await getUserEmail(uid);
+        console.log(email);
+        admin.auth().getUserByEmail(email)
+        const userRef = admin.firestore().collection('users').doc(email);
+        //get user's buddy list
+        const buddyList = await (await userRef.get()).data()['buddies'];
+        // turn buddy list into array
+        console.log(buddyList);
+        //remove user from all buddy lists
+        for (const buddy of buddyList) {
+            console.log("buddy: ");
+            console.log(buddy);
+            buddy_email = await getUserEmail(buddy);
+            //remove user from buddy's buddy list
+            await removeUserFromBuddyList(buddy_email, email);
+        }
+        //delete user from firestore
+        deleteUser(uid);
+      }
+      catch (error) {
+        console.error("Error with deleteUserInfo", error);
+        throw new Error("Error deleting user info");
+      }
+};
+
 module.exports = {
   checkUserLoggedIn,
   countUsers,
@@ -491,4 +518,5 @@ module.exports = {
   showProfilePicture,
   removeUserFromBuddyList,
   checkFlag,
+  deleteUserInfo,
 };

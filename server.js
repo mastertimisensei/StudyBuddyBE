@@ -22,6 +22,7 @@ const {
   showProfilePicture,
   removeUserFromBuddyList,
   checkFlag,
+  deleteUserInfo,
 } = require("./backend_functions/utilities");
 const { deleteUser } = require("./backend_functions/deleteUser");
 const { swipeThem } = require("./backend_functions/match");
@@ -379,7 +380,7 @@ app2.post("/deleteProfile", async (req, res) => {
   const { token } = req.body;
   try {
     const uid = (await verifyIdToken(token)).uid;
-    await deleteUser(uid);
+    await deleteUserInfo(uid);
     res.status(200).send("Profile deleted successfully");
   } catch (error) {
     res.status(500).send("Error deleting profile");
