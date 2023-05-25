@@ -264,9 +264,14 @@ app2.post("/swipe", async (req, res) => {
   console.log(swipe);
   try {
     //const uid_email = (await verifyIdToken(token)).email;
-    await swipeThem(email, buddy_email, swipe);
-    // swipe is a boolean value with true as its default
-    res.status(200).send("Swipe sent successfully");
+    const result = await swipeThem(email, buddy_email, swipe);
+    if (result.success) {
+      // swipe is a boolean value with true as its default
+      res.status(200).send({ message: "Swipe sent successfully", isMatch: result.isMatch });
+    } else {
+      // res.status(500).send("Error swiping");
+      console.log('nooooo');
+    }
   } catch (error) {
     res.status(500).send("Error swiping");
     console.log(error);
