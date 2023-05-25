@@ -25,6 +25,8 @@ const deleteUser = async (uid) => {
         const buddyList = await userRef.get().buddies;
         //remove user from all buddy lists
         for (const buddy of buddyList) {
+            console.log("buddy: ");
+            console.log(buddy);
             buddy_email = await getUserEmail(buddy);
             removeUserFromBuddyList(buddy_email, email);
         }
