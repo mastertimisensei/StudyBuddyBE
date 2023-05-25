@@ -452,15 +452,15 @@ const buddyDoc = await buddyRef.get();
 const messagesTemp = buddyDoc.data().messages || {};
 
 // Remove the user_uid from the messages map
-delete messagesTemp[user_uid];
-
+delete messagesTemp[email];
 // Update the buddyRef document with the modified messages map
 await buddyRef.update({ messages: messagesTemp });
 
 // Repeat the same steps for userRef
 const userDoc = await userRef.get();
 const messages2 = userDoc.data().messages || {};
-delete messages2[buddy_uid];
+
+delete messages2[buddy_email];
 await userRef.update({ messages: messages2 });
 };
 
