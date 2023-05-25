@@ -22,7 +22,8 @@ const deleteUser = async (uid) => {
         admin.auth().getUserByEmail(email)
         const userRef = admin.firestore().collection('users').doc(email);
         //get user's buddy list
-        const buddyList = await userRef.get().buddies;
+        const buddyList = await userRef.get().buddies || [];
+        console.log(buddyList);
         //remove user from all buddy lists
         for (const buddy of buddyList) {
             console.log("buddy: ");
