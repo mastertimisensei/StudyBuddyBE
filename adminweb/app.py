@@ -4,6 +4,7 @@ import requests
 import firebase_admin
 import ML.classification as classification
 import ML.checker as checker
+import json
 
 app = Flask(__name__)
 
@@ -149,10 +150,9 @@ def show_recommendation_page():
     response = response.split("Recommendation Score: ")[0]
     try:
         #the response is a json object
-        print(response)
-        print(type(response))
-        data = eval(response)
-        print(data)
+        data = response
+        #turn response into a dictionary
+        data = json.loads(data)
         return render_template('recommendation.html', recommendation=data)
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
