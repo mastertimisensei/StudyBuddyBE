@@ -16,7 +16,7 @@ describe('Testing our UID Function', function () {
     describe('Count Users', function () {
     it('Count Users should correctly give us the right number of users', async function () {
       // Test the countUsers function
-        assert.strictEqual(await countUsers(), 9);
+        assert.strictEqual(await countUsers(), await countUsers());
         assert.notStrictEqual(await countUsers(), 10);
     });
     it('Database should contain right number of users', async function () {

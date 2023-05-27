@@ -50,7 +50,7 @@ app2.post("/createUser", async (req, res) => {
     res.status(200).send("User created successfully");
     //res.status(200).send("No")
   } catch (error) {
-    res.status(500).send("Error creating user");
+    res.status(500).send("Error creating user. Email already exists");
   }
 });
 

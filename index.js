@@ -6,7 +6,7 @@ const {swipeThem} = require('./backend_functions/match.js');
 const {deleteUser} = require('./backend_functions/deleteUser.js');
 //const {removeUserFromBuddyList} = require('./backend_functions/utilities.js');
 
-deleteUserInfo("vuio6rVHXzQwPGTPYs84xSZ6Hkk1");
+//swipeThem("fishman@fakemail.com",'alamonimdad@hotmail.com',true);
 
 //lets create a user
 //createUser('John Snow','johnsnow@gmail.com', 'password');

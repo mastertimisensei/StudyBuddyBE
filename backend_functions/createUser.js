@@ -44,6 +44,7 @@ async function createUser(name,email, password, Location = "", set = null, flag 
       console.log('Successfully created new user:', userRecord.uid);
     } catch (error) {
       console.error('Error creating new user:', error);
+      throw error;
     }
   }
 
