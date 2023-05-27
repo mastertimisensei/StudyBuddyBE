@@ -6,8 +6,8 @@
 
 <h1>Recommendation Score</h1>
 #insert panda gif here
-<img src="static/panda-14.gif" alt="static/panda-93.gif">
-<p>Recommendation Score: {{ recommendation.score }}</p>
+<img src="{{url_for('static',filename = 'panda-14.gif')}}" alt="{{url_for('static',filename = 'panda-93.gif')}}">
+<p>Recommendation Score: {{ recommendation }}</p>
 
 {% block footer %}
     {{ super() }}
