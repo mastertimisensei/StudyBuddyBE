@@ -134,13 +134,20 @@ def show_recommendation_score():
 def show_recommendation_page():
     user = request.args.get('user_uid')
     buddy = request.args.get('buddy_uid')
-    recommendation_url = 'https://studybuddy-backend.onrender.com/showRecommendationScore'
-    post = requests.post(recommendation_url, data={'uid': user, 'buddy_uid': buddy})
-    print(post.json())
-    if post.status_code != 200:
-        return f"Error fetching recommendation: {post.status_code}"
+    get_user_url = 'https://studybuddy-backend.onrender.com/getAdminUserData'
+    post1 = requests.post(get_user_url, data={'uid':user})
+    post2 = requests.post(get_user_url, data={'uid': buddy})
+    if post1.status_code != 200:
+        return f"Error fetching user data: {post1.status_code}"
+    if post2.status_code != 200:
+        return f"Error fetching user data: {post2.status_code}"
+    data1 = post1.json()
+    data2 = post2.json()
+    prompt = checker.generate_prompt(data1, data2)
+    print(prompt)
+    response = checker.get_response(prompt)
     try:
-        data = post.json()
+        data = response.json()
         print(data)
         return render_template('recommendation.html', recommendation=data)
     except ValueError as e:
