@@ -147,7 +147,7 @@ def show_recommendation_page():
     print(prompt)
     response = checker.get_response(prompt)
     try:
-        data = response.json()
+        data = response
         print(data)
         return render_template('recommendation.html', recommendation=data)
     except ValueError as e:
