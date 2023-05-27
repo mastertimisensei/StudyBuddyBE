@@ -146,7 +146,7 @@ def show_recommendation_page():
     prompt = checker.generate_prompt(data1, data2)
     response = checker.get_response(prompt)
     print(response)
-    response = response.split(": ")[1]
+    response = response.split("Recommendation Score: ")[1]
     try:
         #the response is a json object
         data = response
