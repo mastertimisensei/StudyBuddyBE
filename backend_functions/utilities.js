@@ -180,25 +180,30 @@ const setUserData = async (
   console.log(email);
   admin.auth().getUserByEmail(email);
   const userRef = admin.firestore().collection("users").doc(email);
-  await uploadProfilePicture(uid, photoPath);
-  //var photoLink = await getProfilePicture(uid);
-  photoLink = await showProfilePicture(uid);
+
+  let updateData = {
+    name: name,
+    age: age,
+    Language: Language,
+    Major: Major,
+    InterestedSubjects: InterestedSubjects,
+    Location: Location,
+    University: University,
+    bio: bio,
+    flag: flag,
+  };
+
+  if(photoPath) { // if photoPath is not null
+    await uploadProfilePicture(uid, photoPath);
+    let photoLink = await showProfilePicture(uid);
+    updateData.photoUrl = photoLink; // preventign overriding image in case there is one in db
+  }
+
   admin
     .firestore()
     .collection("users")
     .doc(email)
-    .update({
-      name: name,
-      age: age,
-      Language: Language,
-      Major: Major,
-      InterestedSubjects: InterestedSubjects,
-      Location: Location,
-      University: University,
-      bio: bio,
-      photoUrl: photoLink,
-      flag: flag,
-    })
+    .update(updateData)
     .then(() => {
       console.log("Successfully updated user email in firestore");
     });
