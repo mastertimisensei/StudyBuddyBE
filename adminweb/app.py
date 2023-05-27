@@ -144,8 +144,8 @@ def show_recommendation_page():
     data1 = post1.json()
     data2 = post2.json()
     prompt = checker.generate_prompt(data1, data2)
-    print(prompt)
     response = checker.get_response(prompt)
+    print(response)
     try:
         #the response is a json object
         data = eval(response)
