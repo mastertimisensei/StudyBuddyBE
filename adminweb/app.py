@@ -149,6 +149,8 @@ def show_recommendation_page():
     response = response.split("Recommendation Score: ")[0]
     try:
         #the response is a json object
+        print(response)
+        print(type(response))
         data = eval(response)
         print(data)
         return render_template('recommendation.html', recommendation=data)
