@@ -129,6 +129,22 @@ def show_recommendation_score():
 
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
+
+@app.route('/showRecommendationPage', methods=['GET'])
+def show_recommendation_page():
+    user = request.args.get('user_uid')
+    buddy = request.args.get('buddy_uid')
+    recommendation_url = 'https://studybuddy-backend.onrender.com/getRecommendation'
+    post = requests.post(recommendation_url, data={'user_uid': user, 'buddy_uid': buddy})
+    if post.status_code != 200:
+        return f"Error fetching recommendation: {post.status_code}"
+    try:
+        data = post.json()
+        print(data)
+        return render_template('recommendation.html', recommendation=data)
+    except ValueError as e:
+        return f"Error parsing response as JSON: {e}"
+    
     
 #log out the user
 @app.route('/logout')
