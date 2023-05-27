@@ -152,7 +152,7 @@ def show_recommendation_page():
         #the response is a json object
         data = response
         #turn response into a dictionary
-        data = json.loads(data)
+        data = json.loads(data, strict=False)
         return render_template('recommendation.html', recommendation=data)
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
