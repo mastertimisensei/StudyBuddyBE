@@ -134,7 +134,7 @@ def show_recommendation_score():
 def show_recommendation_page():
     user = request.args.get('user_uid')
     buddy = request.args.get('buddy_uid')
-    recommendation_url = 'https://studybuddy-backend.onrender.com/getRecommendation'
+    recommendation_url = 'https://studybuddy-backend.onrender.com/showRecommendationScore'
     post = requests.post(recommendation_url, data={'uid': user, 'buddy_uid': buddy})
     if post.status_code != 200:
         return f"Error fetching recommendation: {post.status_code}"
