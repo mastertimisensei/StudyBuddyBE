@@ -160,7 +160,11 @@ def show_recommendation_page():
         return render_template('recommendation.html', score=score, reason=reason)
     except ValueError as e:
         return f"Error parsing response as JSON: {e}"
-    
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    # Your error handling logic here
+    return "Try Reloading. Open AI issue", 500 
     
 #log out the user
 @app.route('/logout')
