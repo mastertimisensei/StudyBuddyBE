@@ -146,10 +146,10 @@ def show_recommendation_page():
     prompt = checker.generate_prompt(data1, data2)
     response = checker.get_response(prompt)
     print(response)
-    response = response.split("Recommendation Score: ")[1]
+    response = response.split("Recommendation Score: ")[0]
     try:
         #the response is a json object
-        data = response
+        data = eval(response)
         print(data)
         return render_template('recommendation.html', recommendation=data)
     except ValueError as e:
