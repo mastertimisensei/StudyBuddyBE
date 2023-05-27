@@ -242,7 +242,8 @@ const getAllUsersExceptCurrentUser = async (uid) => {
     if (
       users[i].uid !== uid &&
       !users[i].buddies.includes(uid) &&
-      !users[i].swipedMe.includes(uid)
+      !users[i].swipedMe.includes(uid) &&
+      users[i].flag
     ) {
       // push the user data to the usersData array
       usersData.push(users[i]);
