@@ -4,9 +4,12 @@
     {{ super() }}
 {% endblock %}
 
+{% block content %}
 <h1>Recommendation Score</h1>
 <img src="{{url_for('static',filename = 'panda-14.gif')}}" alt="{{url_for('static',filename = 'panda-93.gif')}}">
 <p>Recommendation Score: {{ recommendation }}</p>
+
+{% endblock %}
 
 {% block footer %}
     {{ super() }}
