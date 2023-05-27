@@ -34,7 +34,7 @@ def generate_prompt(json_obj1,json_obj2):
     bio = json_obj1["bio"]
     print(bio)
     cosine_similarity = classification.get_cosine_similarity(json_obj1["bio"], json_obj2["bio"])
-    prompt = "" + instruction + "\n" + other_considerations + "\n\nPerson 1\n" + json_str1 + "\n\nPerson 2\n" + json_str2 + "\n\nCosine similarity : "+ str(cosine_similarity) + "\n\nGenerate your response in this json format.\n\"{\n    \"score\":<<score>>, \"reason\": \"<<reason>>\"\n    }\""
+    prompt = "" + instruction + "\n" + other_considerations + "\n\nPerson 1\n" + json_str1 + "\n\nPerson 2\n" + json_str2 + "\n\nCosine similarity : "+ str(cosine_similarity) + "\n\nGenerate your response in this json format.\n\"{\n    \"score\":<<score>>, \"reason\": \"<<reason>>\"\n    }\" \n\n ensure that it is a valid JSON format"
     return prompt
 
 def get_response(prompt):
