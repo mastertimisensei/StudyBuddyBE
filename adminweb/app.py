@@ -148,7 +148,7 @@ def show_recommendation_page():
     print(response)
     try:
         #the response is a json object
-        data = eval(response)
+        data = response
         print(data)
         return render_template('recommendation.html', recommendation=data)
     except ValueError as e:
