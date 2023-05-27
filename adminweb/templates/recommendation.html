@@ -8,8 +8,8 @@
 <h1>Recommendation Score</h1>
 
 <img src="{{url_for('static',filename = 'panda-14.gif')}}" alt="static/panda-93.gif">
-<p>Recommendation Score: {{ recommendation['score'] }}</p>
-<p>Reason: {{ recommendation['reason'] }}</p>
+<p>Recommendation Score: {{ recommendation.score }}</p>
+<p>Reason: {{ recommendation.reason }}</p>
 {% endblock %}
 
 {% block footer %}
