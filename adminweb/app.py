@@ -165,7 +165,7 @@ def internal_server_error(error):
 def logout():
     global user
     user = None
-    return redirect(url_for('/'))
+    return redirect(url_for(''))
 
 @app.route('/contact')
 def contact():
