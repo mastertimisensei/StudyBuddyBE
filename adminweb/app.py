@@ -165,7 +165,7 @@ def internal_server_error(error):
 def logout():
     global user
     user = None
-    return redirect(url_for(''))
+    return redirect('https://admin-web-6a8l.onrender.com/')
 
 @app.route('/contact')
 def contact():
