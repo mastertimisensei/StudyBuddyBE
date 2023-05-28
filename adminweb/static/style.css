@@ -19,6 +19,11 @@ p {
   text-align: center;
 }
 
+body {
+  background-color: #f1ede4;
+  font-family: Arial, sans-serif;
+}
+
 /* Style the buttons */
 button {
   display: block;

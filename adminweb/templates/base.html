@@ -23,7 +23,9 @@
     </header>
 
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        <image src="{{url_for('static',filename = 'panda-14.gif')}}" alt="static/panda-93.gif">
+        {% endblock %}
     </main>
     {% block footer %}
             <p>&copy;2023 - Study Buddy</p>
