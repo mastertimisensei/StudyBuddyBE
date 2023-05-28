@@ -158,7 +158,7 @@ def show_recommendation_page():
 @app.errorhandler(500)
 def internal_server_error(error):
     # Your error handling logic here
-    return "Try Reloading. Open AI issue", 500 
+    return render_template('AIError.html') 
     
 #log out the user
 @app.route('/logout')
